@@ -1,0 +1,3 @@
+[submodule "full_libft"]
+	path = full_libft
+	url = https://github.com/Obergod/full_libft.git
