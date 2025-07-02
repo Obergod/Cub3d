@@ -72,6 +72,16 @@ int	check_textures(char **cub)
 	return (0);
 }
 
+// faire un flood fill remplant les zeros par des x, si un x est colle a un espace
+// ou un out of bound = map kk
+
+int	check_map(char **map, int x, int y)
+{
+	if (x < 0 || y < 0)
+		return ;
+	check_map(map[y][x], x + 1, y)
+}
+
 int	main(int ac, char **av)
 {
 	int	fd;
