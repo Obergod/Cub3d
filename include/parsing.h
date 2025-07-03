@@ -16,8 +16,15 @@
 # include "../full_libft/include/libft.h"
 # include "../full_libft/include/get_next_line.h"
 
+typedef struct s_points
+{
+	int	x;
+	int	y;
+}	t_points;
+
 /*****		a trier		*******/
-int	check_textures(char **cub);
+int		check_textures(char **cub);
+void	flood_fill(char **map, int row, int col, bool *is_valid);
 
 
 

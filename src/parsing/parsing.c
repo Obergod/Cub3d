@@ -42,9 +42,10 @@ int	check_errors(int fd)
 
 	cub = split_all_file(fd);
 	if (!cub)
-		return (1);
+		return (-1);
 	if (check_textures(cub) == 1)
 		return (1);
+	//must check if nothing after map + gotta split map
 	return (0);
 }
 
@@ -69,17 +70,61 @@ int	check_textures(char **cub)
 		return (1);
 	if (strncmp(cub[5], "C ", 2) != 0)
 		return (1);
+// Need to check path and if colors are good
 	return (0);
 }
 
-// faire un flood fill remplant les zeros par des x, si un x est colle a un espace
-// ou un out of bound = map kk
-
-int	check_map(char **map, int x, int y)
+int	check_wall(char **map, char c, int i, int j)
 {
-	if (x < 0 || y < 0)
+	t_points size;
+	int	row;
+	int	col;
+	char	**flood_map;
+	// put in struct in a good way later
+	bool	is_valid_map = true;
+
+	// Maybe isolate the map from the texture here ? ex : map + 5
+	flood_map = ft_2dstrdup(map);
+	if (!flood_map)
+		return (-1);
+	row = -1;
+	col = -1;
+	size.y = i;
+	size.x = j;
+	while (map[col][row] != c)
+	{
+		col++;
+		row++;
+	}
+	flood_map[col][row] = '0';
+	flood_fill(flood_map, row, col, &is_valid_map);
+	ft_free_split(flood_map);
+	if (is_valid_map == false)
+	{
+		ft_free_split(map);
+		return (1);
+	}
+}
+
+void	flood_fill(char **map, int row, int col, bool *is_valid)
+{
+	if (row < 0 || col < 0 || !map[col][row])
+	{
+		*is_valid = false;
 		return ;
-	check_map(map[y][x], x + 1, y)
+	}
+	if (map[col][row] == 'x' || map[col][row] == '1')
+		return ;
+	if (map[col][row] != '0')
+	{
+		*is_valid = false;
+		return ;
+	}
+	map[col][row] = 'x';
+	flood_fill(map, row + 1, col, is_valid);
+	flood_fill(map, row - 1, col, is_valid);
+	flood_fill(map, row, col + 1, is_valid);
+	flood_fill(map, row, col - 1, is_valid);
 }
 
 int	main(int ac, char **av)
