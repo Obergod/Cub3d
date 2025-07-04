@@ -70,13 +70,45 @@ int	check_textures(char **cub)
 		return (1);
 	if (strncmp(cub[5], "C ", 2) != 0)
 		return (1);
+	if (only_textures(cub) == 1)
+		return (1);
 // Need to check path and if colors are good
 	return (0);
 }
 
-int	check_wall(char **map, char c, int i, int j)
+int	test_images(t_vars *vars)
 {
-	t_points size;
+	int	i;
+
+	i = -1;
+	while (++i < 4)
+	{
+		vars->img = mlx_xpm_file_to_image(vars->mlx, vars->textures[i],
+				&vars->height, &vars->width);
+		if (vars->img == NULL)
+			return (1);
+	}
+	return (0);
+}
+
+int	only_textures(char **cub)
+{
+	int	i;
+
+	i = -1;
+	while (++i < 6)
+	{
+		cub[i] = cub[i] + 2;
+		while (*cub[i] == ' ')
+			++cub[i];
+		if (*cub[i] == '\0')
+			return (1);
+	}
+	return (0);
+}
+
+int	check_wall(char **map, char c)
+{
 	int	row;
 	int	col;
 	char	**flood_map;
@@ -89,8 +121,6 @@ int	check_wall(char **map, char c, int i, int j)
 		return (-1);
 	row = -1;
 	col = -1;
-	size.y = i;
-	size.x = j;
 	while (map[col][row] != c)
 	{
 		col++;
@@ -104,6 +134,7 @@ int	check_wall(char **map, char c, int i, int j)
 		ft_free_split(map);
 		return (1);
 	}
+	return (0);
 }
 
 void	flood_fill(char **map, int row, int col, bool *is_valid)

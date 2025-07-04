@@ -6,6 +6,11 @@ OBJ_DIR = obj
 SRCS_DIR = src/
 INCS_DIR = includes/
 
+# Libraries
+MLX_DIR = minilibx-linux/
+MLX = $(MLX_DIR)libmlx_Linux.a
+MLX_FLAGS = -L$(MLX_DIR) -lmlx_Linux -L/usr/lib -lXext -lX11 -lm -lz
+
 # Libft
 LIBFT_DIR = full_libft
 LIBFT = $(LIBFT_DIR)/libftfull.a
@@ -14,7 +19,7 @@ LIBFT_URL = https://github.com/Obergod/full_libft.git
 # Compilation
 CC = gcc
 WFLAGS = -Wall -Werror -Wextra
-CFLAGS  = $(WFLAGS) -I$(INCS_DIR) -I$(LIBFT_DIR)/include -O3
+CFLAGS  = $(WFLAGS) -I$(INCS_DIR) -I$(LIBFT_DIR)/include -I$(MLX_DIR) -g3 -O3
 DEPFLAGS = -MMD -MP
 
 # Affichage
@@ -38,6 +43,9 @@ all: $(NAME)
 
 libft: $(LIBFT)
 
+$(MLX):
+	$(MAKE) -C $(MLX_DIR)
+
 $(LIBFT):
 	@printf "$(YELLOW)Initialisation libft$(RESET)"
 	@for i in 1 2 3; do printf "."; sleep 0.2; done
@@ -59,14 +67,15 @@ $(OBJ_DIR)/%.o: $(SRCS_DIR)/%.c | $(OBJ_DIR)
 	@$(CC) $(CFLAGS) $(DEPFLAGS) -c $< -o $@
 	@printf "$(CLEAR)$(GREEN)✓ Compiled $<$(RESET)\n"
 
-$(NAME): libft $(OBJ_FILES)
+$(NAME): libft $(MLX) $(OBJ_FILES)
 	@printf "$(YELLOW)Linking...$(RESET)"
-	@$(CC) $(CFLAGS) $(OBJ_FILES) $(LIBFT) -o $(NAME)
+	@$(CC) $(CFLAGS) $(OBJ_FILES) $(LIBFT) $(MLX_FLAGS) -o $(NAME)
 	@printf "$(CLEAR)$(GREEN)✓ $(NAME) created!$(RESET)\n"
 
 clean:
 	@printf "$(YELLOW)cleaning up obj...$(RESET)"
 	@rm -rf $(OBJ_DIR)
+	@$(MAKE) -C $(MLX_DIR) clean
 	@$(MAKE) -s -C $(LIBFT_DIR) clean
 	@printf "$(CLEAR)$(GREEN)✓ Objects cleaned!$(RESET)\n"
 
