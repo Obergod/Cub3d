@@ -1,3 +1,6 @@
 [submodule "full_libft"]
 	path = full_libft
 	url = https://github.com/Obergod/full_libft.git
+[submodule "minilibx-linux"]
+	path = minilibx-linux
+	url = git@github.com:42Paris/minilibx-linux.git
