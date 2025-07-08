@@ -43,9 +43,13 @@ typedef struct s_vars
 
 
 /*****		a trier		*******/
-int		check_textures(char **cub);
+int		check_textures(char **cub, t_vars *vars);
 void	flood_fill(char **map, int row, int col, bool *is_valid);
-int		only_textures(char **cub);
+int		only_textures(char **cub, t_vars *vars);
+int		check_wall(char **map, char c);
+int		check_map(char **cub);
+int		test_images(t_vars *vars);
+t_vars	*inits(void);
 
 
 
