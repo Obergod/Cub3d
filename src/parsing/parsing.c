@@ -36,138 +36,41 @@ char	**split_all_file(int fd)
 	return (cub);
 }
 
-int	check_errors(int fd)
+int	check_errors(int fd, t_vars *vars)
 {
 	char	**cub;
+	int		err;
 
 	cub = split_all_file(fd);
 	if (!cub)
 		return (-1);
-	if (check_textures(cub) == 1)
-		return (1);
+	err = check_textures(cub, vars);
+	if (err != 0)
+		return (err);
+	err = check_map(cub);
+	if (err != 0)
+		return (err);
 	//must check if nothing after map + gotta split map
 	return (0);
 }
 
-int	check_textures(char **cub)
-{
-	int	 i;
 
-	i = 0;
-	while (cub[i])
-		i++;
-	if (i < 6)
-		return (1);
-	if (strncmp(cub[0], "NO ", 3) != 0)
-		return (1);
-	if (strncmp(cub[1], "SO ", 3) != 0)
-		return (1);
-	if (strncmp(cub[2], "WE ", 3) != 0)
-		return (1);
-	if (strncmp(cub[3], "EA ", 3) != 0)
-		return (1);
-	if (strncmp(cub[4], "F ", 2) != 0)
-		return (1);
-	if (strncmp(cub[5], "C ", 2) != 0)
-		return (1);
-	if (only_textures(cub) == 1)
-		return (1);
-// Need to check path and if colors are good
-	return (0);
-}
 
-int	test_images(t_vars *vars)
-{
-	int	i;
-
-	i = -1;
-	while (++i < 4)
-	{
-		vars->img = mlx_xpm_file_to_image(vars->mlx, vars->textures[i],
-				&vars->height, &vars->width);
-		if (vars->img == NULL)
-			return (1);
-	}
-	return (0);
-}
-
-int	only_textures(char **cub)
-{
-	int	i;
-
-	i = -1;
-	while (++i < 6)
-	{
-		cub[i] = cub[i] + 2;
-		while (*cub[i] == ' ')
-			++cub[i];
-		if (*cub[i] == '\0')
-			return (1);
-	}
-	return (0);
-}
-
-int	check_wall(char **map, char c)
-{
-	int	row;
-	int	col;
-	char	**flood_map;
-	// put in struct in a good way later
-	bool	is_valid_map = true;
-
-	// Maybe isolate the map from the texture here ? ex : map + 5
-	flood_map = ft_2dstrdup(map);
-	if (!flood_map)
-		return (-1);
-	row = -1;
-	col = -1;
-	while (map[col][row] != c)
-	{
-		col++;
-		row++;
-	}
-	flood_map[col][row] = '0';
-	flood_fill(flood_map, row, col, &is_valid_map);
-	ft_free_split(flood_map);
-	if (is_valid_map == false)
-	{
-		ft_free_split(map);
-		return (1);
-	}
-	return (0);
-}
-
-void	flood_fill(char **map, int row, int col, bool *is_valid)
-{
-	if (row < 0 || col < 0 || !map[col][row])
-	{
-		*is_valid = false;
-		return ;
-	}
-	if (map[col][row] == 'x' || map[col][row] == '1')
-		return ;
-	if (map[col][row] != '0')
-	{
-		*is_valid = false;
-		return ;
-	}
-	map[col][row] = 'x';
-	flood_fill(map, row + 1, col, is_valid);
-	flood_fill(map, row - 1, col, is_valid);
-	flood_fill(map, row, col + 1, is_valid);
-	flood_fill(map, row, col - 1, is_valid);
-}
 
 int	main(int ac, char **av)
 {
 	int	fd;
+	t_vars *vars;
 
 	if (ac != 2)
 		return (printf("Error\n"), 1);
 	fd = open(av[1], O_RDONLY);
 	if (fd < 0)
-		return (1);
-	if (check_errors(fd) == 1)
-		printf("Error textures\n");
+		return (printf("Error\n"), 1);
+	vars = inits();
+	if (!vars)
+		return (printf("Error\n"), 1);
+	if (check_errors(fd, vars) == 1)
+		printf("Error cub\n");
 	return (0);
 }

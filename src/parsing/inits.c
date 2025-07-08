@@ -12,13 +12,21 @@
 
 #include "../../include/parsing.h"
 
-void	inits(t_vars *vars)
+t_vars	*inits(void)
 {
-	vars->mlx = NULL;
+	t_vars *vars;
+
+	vars = malloc(sizeof(t_vars));
+	if (!vars)
+		return (NULL);
+	vars->mlx = mlx_init();
+	if (!vars->mlx)
+		return (free(vars), NULL);
 	vars->win = NULL;
 	vars->img = NULL;
 	vars->map = NULL;
 	vars->textures = NULL;
 	vars->height = 32;
 	vars->width = 32;
+	return (vars);
 }
