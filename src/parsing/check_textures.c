@@ -12,27 +12,32 @@
 
 #include "../../include/parsing.h"
 
+//	think about how to do textures, linked lists or strncmp
 int	check_textures(char **cub, t_vars *vars)
 {
 	int	 i;
+	int	nb_texture;
 
-	i = 0;
-	while (cub[i])
-		i++;
-	if (i < 6)
-		return (1);
-	if (ft_strncmp(cub[0], "NO ", 3) != 0)
-		return (1);
-	if (ft_strncmp(cub[1], "SO ", 3) != 0)
-		return (1);
-	if (ft_strncmp(cub[2], "WE ", 3) != 0)
-		return (1);
-	if (ft_strncmp(cub[3], "EA ", 3) != 0)
-		return (1);
-	if (ft_strncmp(cub[4], "F ", 2) != 0)
-		return (1);
-	if (ft_strncmp(cub[5], "C ", 2) != 0)
-		return (1);
+	nb_texture = 0;
+	i = -1;
+	vars->textures = cub;
+	while (cub[++i])
+	{
+		if (ft_strncmp(cub[i], "NO ", 3) == 0)
+		{
+			if (test_images())
+		}
+		else if (ft_strncmp(cub[i], "SO ", 3) == 0)
+			return (1);
+		else if (ft_strncmp(cub[i], "WE ", 3) == 0)
+			return (1);
+		else if (ft_strncmp(cub[i], "EA ", 3) == 0)
+			return (1);
+		else if (ft_strncmp(cub[i], "F ", 2) == 0)
+			return (1);
+		else if (ft_strncmp(cub[i], "C ", 2) == 0)
+			return (1);
+	}
 	if (only_textures(cub, vars) == 1)
 		return (1);
 	if (test_images(vars) == 1)

@@ -20,12 +20,6 @@
 
 # define WIN_WIDTH 1920
 # define WIN_HEIGHT 1080
-# define NO_TEXTURE 0
-# define SO_TEXTURE 1
-# define WE_TEXTURE 2
-# define EA_TEXTURE 3
-# define F_COLOR 4
-# define C_COLOR 5
 
 typedef struct s_vars
 {
@@ -40,6 +34,23 @@ typedef struct s_vars
 	int		width;
 }	t_vars;
 
+enum			e_dir
+{
+	NO,
+	SS,
+	WE,
+	EA,
+	C,
+	F
+};
+
+typedef struct s_txtrs
+{
+	char		**textures;
+	enum e_dir	dir;
+	struct s_txtrs *next;
+
+} t_txtrs;
 
 
 /*****		a trier		*******/
