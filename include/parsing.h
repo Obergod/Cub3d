@@ -34,32 +34,15 @@ typedef struct s_vars
 	int		width;
 }	t_vars;
 
-enum			e_dir
-{
-	NO,
-	SS,
-	WE,
-	EA,
-	C,
-	F
-};
-
-typedef struct s_txtrs
-{
-	char		**textures;
-	enum e_dir	dir;
-	struct s_txtrs *next;
-
-} t_txtrs;
-
 
 /*****		a trier		*******/
 int		check_textures(char **cub, t_vars *vars);
 void	flood_fill(char **map, int row, int col, bool *is_valid);
-int		only_textures(char **cub, t_vars *vars);
+int		only_textures(char *texture);
 int		check_wall(char **map, char c);
 int		check_map(char **cub);
-int		test_images(t_vars *vars);
+int		test_image(t_vars *vars, char *texture);
+int		check_colors(char *texture);
 t_vars	*inits(void);
 
 

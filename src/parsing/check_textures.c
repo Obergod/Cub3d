@@ -20,63 +20,77 @@ int	check_textures(char **cub, t_vars *vars)
 
 	nb_texture = 0;
 	i = -1;
-	vars->textures = cub;
+	//find a way to check if ! NO + NO
 	while (cub[++i])
 	{
-		if (ft_strncmp(cub[i], "NO ", 3) == 0)
+		if (!ft_strncmp(cub[i], "NO ", 3) || !ft_strncmp(cub[i], "SO ", 3) || 
+				!ft_strncmp(cub[i], "WE ", 3) || !ft_strncmp(cub[i], "EA ", 3))
 		{
-			if (test_images())
+			if (test_image(vars, cub[i]) == 1)
+				return (1);
+			nb_texture++;
 		}
-		else if (ft_strncmp(cub[i], "SO ", 3) == 0)
-			return (1);
-		else if (ft_strncmp(cub[i], "WE ", 3) == 0)
-			return (1);
-		else if (ft_strncmp(cub[i], "EA ", 3) == 0)
-			return (1);
-		else if (ft_strncmp(cub[i], "F ", 2) == 0)
-			return (1);
-		else if (ft_strncmp(cub[i], "C ", 2) == 0)
-			return (1);
+		else if (!ft_strncmp(cub[i], "F ", 2) || !ft_strncmp(cub[i], "C ", 2))
+		{
+			if (check_colors(cub[i]) == 1)
+				return (1);
+			nb_texture++;
+		}
 	}
-	if (only_textures(cub, vars) == 1)
+	if (nb_texture != 6)
 		return (1);
-	if (test_images(vars) == 1)
-		return (1);
-// Need to check path and if colors are good
 	return (0);
 }
 
-int	test_images(t_vars *vars)
+int	check_colors(char *texture)
 {
-	int	i;
+	int		i;
+	char	**color;
+	int		rgb;
 
-	i = 0;
-	while (i < 4)
-	{
-		if (vars->img)
-			mlx_destroy_image(vars->mlx, vars->img);
-		vars->img = mlx_xpm_file_to_image(vars->mlx, vars->textures[i],
-				&vars->height, &vars->width);
-		if (vars->img == NULL)
-			return (1);
-		i++;
-	}
-	return (0);
-}
-
-int	only_textures(char **cub, t_vars *vars)
-{
-	int	i;
-
+	i = only_textures(texture);
+	if (i == -1)
+		return (1);
+	color = ft_split(texture + i, ',');
+	if (!color)
+		return (1);
 	i = -1;
-	while (++i < 6)
+	while (color[++i])
 	{
-		cub[i] = cub[i] + 2;
-		while (*cub[i] == ' ')
-			cub[i]++;
-		if (*cub[i] == '\0')
+		rgb = ft_atoi(color[i]);
+		if (rgb < 0 || rgb > 255)
 			return (1);
 	}
-	vars->textures = cub;
+	free(color);
+	if (i != 3)
+		return (1);
 	return (0);
+}
+
+int	test_image(t_vars *vars, char *texture)
+{
+	int	i;
+
+	i = only_textures(texture);
+	if (i == -1)
+		return (1);
+	if (vars->img)
+		mlx_destroy_image(vars->mlx, vars->img);
+	vars->img = mlx_xpm_file_to_image(vars->mlx, texture + i,
+			&vars->height, &vars->width);
+	if (vars->img == NULL)
+		return (1);
+	return (0);
+}
+
+int	only_textures(char *texture)
+{
+	int	i;
+
+	i = 2;
+	while (texture[i] == ' ')
+		i++;
+	if (texture[i] == '\0')
+		return (-1);
+	return (i);
 }
