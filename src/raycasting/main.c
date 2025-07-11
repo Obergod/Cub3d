@@ -38,8 +38,9 @@ void draw_circle(int x, int y, int size, int color, t_game *game)
         put_pixel(x + i, y + size, color, game);
 }
 
-void init_games(t_game *game)
+void init_game(t_game *game)
 {
+    init_player(WIDHT / 2, HEIGHT / 2, &game->player);
     game->mlx = mlx_init();
     game->win = mlx_new_window(game->mlx, WIDHT, HEIGHT, "Cub3D");
     game->img = mlx_new_image(game->mlx, WIDHT, HEIGHT);
@@ -47,13 +48,23 @@ void init_games(t_game *game)
     mlx_put_image_to_window(game->mlx, game->win, game->img, 0, 0);
 }
 
+int draw_loop(t_game *game)
+{
+    t_player *player = &game->player;
+    move_player(player);
+    draw_circle(player->x, player->y, 15, 0x00FF00, game);
+    mlx_put_image_to_window(game->mlx, game->win, game->img, 0, 0);
+}                               
+
 int main()
 {
     t_game game;
 
-    init_games(&game);
-    // put_pixel(WIDHT / 2, HEIGHT / 2, 0x0000FF00, &game);
-    draw_circle(WIDHT / 2, HEIGHT / 2, 10, 0x0000FF00, &game);
-    mlx_put_image_to_window(game.mlx, game.win, game.img, 0, 0);
+    init_game(&game);
+    mlx_hook(game.win, 2, 1L<<0, key_press, &game.player);
+    mlx_hook(game.win, 3, 1L<<0, key_release, &game.player);
+    
+
+    mlx_loop_hook(game.mlx, draw_loop, &game);
     mlx_loop(game.mlx);
 }

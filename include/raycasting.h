@@ -24,6 +24,17 @@
 
 #define PI 3.141592653
 
+typedef struct s_player
+{
+    float x;
+    float y;
+
+    bool key_up;
+    bool key_down;
+    bool key_right;
+    bool key_left;
+} t_player; 
+
 typedef struct s_game
 {
     void *mlx;
@@ -33,14 +44,10 @@ typedef struct s_game
     int bpp;
     int size_line;
     int endian;
+    t_player player;
 } t_game;
 
-typedef struct s_player
-{
-    float x;
-    float y;
-    bool key_up;
-    bool key_down;
-    bool key_right;
-    bool key_left;
-} t_player; 
+void init_player(float x, float y, t_player *player);
+int key_press(int keycode, t_player *player);
+int key_release(int keycode, t_player *player);
+void move_player(t_player *player);

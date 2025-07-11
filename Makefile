@@ -4,7 +4,7 @@ OBJ_DIR = obj
 
 # Repertorys
 SRCS_DIR = src/
-INCS_DIR = includes/
+INCS_DIR = include/
 
 # Libraries
 MLX_DIR = minilibx-linux/
@@ -18,7 +18,7 @@ LIBFT_URL = https://github.com/Obergod/full_libft.git
 
 # Compilation
 CC = gcc
-WFLAGS = -Wall -Werror -Wextra
+WFLAGS =
 CFLAGS  = $(WFLAGS) -I$(INCS_DIR) -I$(LIBFT_DIR)/include -I$(MLX_DIR) -g3 -O3
 DEPFLAGS = -MMD -MP
 
@@ -30,7 +30,7 @@ CLEAR = \033[2K\r
 
 
 # Sources
-COMMON_SRC = raycasting/main.c
+COMMON_SRC = raycasting/main.c raycasting/player.c
 
 COMMON_SRCS = $(addprefix $(SRCS_DIR), $(COMMON_SRC))
 OBJ_FILES = $(patsubst $(SRCS_DIR)%.c,$(OBJ_DIR)/%.o,$(COMMON_SRCS))
