@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ufalzone <ufalzone@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ugo <ugo@student.42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/08 16:15:38 by ufalzone          #+#    #+#             */
-/*   Updated: 2025/07/08 16:54:28 by ufalzone         ###   ########.fr       */
+/*   Updated: 2025/07/12 14:20:02 by ugo              ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ int main()
 
     init_game(&game);
     mlx_hook(game.win, 2, 1L<<0, key_press, &game.player);
-    mlx_hook(game.win, 3, 1L<<0, key_release, &game.player);
+    mlx_hook(game.win, 3, 1L<<1, key_release, &game.player);
     
 
     mlx_loop_hook(game.mlx, draw_loop, &game);
