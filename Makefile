@@ -18,7 +18,7 @@ LIBFT_URL = https://github.com/Obergod/full_libft.git
 
 # Compilation
 CC = gcc
-WFLAGS =
+WFLAGS = -g3
 CFLAGS  = $(WFLAGS) -I$(INCS_DIR) -I$(LIBFT_DIR)/include -I$(MLX_DIR) -g3 -O3
 DEPFLAGS = -MMD -MP
 

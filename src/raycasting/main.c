@@ -46,7 +46,7 @@ void draw_map(t_game *game)
     int x;
 
     map = game->map;
-    color = 0x0000FF;
+    color = 0xFFFFFF;
     y = 0;
     while (map[y])
     {
@@ -98,7 +98,7 @@ void clear_image(t_game *game)
 
 void init_game(t_game *game)
 {
-    init_player(WIDHT / 2, HEIGHT / 2, &game->player);
+    init_player(WIDHT / 2, HEIGHT / 2, 0, &game->player);
     game->map = get_map();
     game->mlx = mlx_init();
     game->win = mlx_new_window(game->mlx, WIDHT, HEIGHT, "Cub3D");
@@ -107,15 +107,36 @@ void init_game(t_game *game)
     mlx_put_image_to_window(game->mlx, game->win, game->img, 0, 0);
 }
 
+bool touch(float px, float py, t_game *game)
+{
+    int x = px / BLOCKSIZE;
+    int y = py / BLOCKSIZE;
+    if (game->map[y][x] == '1')
+        return true;
+    return false;
+}
+
+
 int draw_loop(t_game *game)
 {
-    t_player *player = &game->player;
+    t_player *player;
+    float ray_x;
+    float ray_y;
     
-    //memset(game->data, 0, game->size_line * HEIGHT);
+    player = &game->player;
     clear_image(game);
     move_player(player);
-    draw_circle(player->x, player->y, 15, 0x00FF00, game);
+    draw_circle(player->x, player->y, 15, 0x00FF, game);
     draw_map(game);
+    ray_x = player->x;
+    ray_y = player->y;
+    while (!touch(ray_x, ray_y, game))
+    {
+        put_pixel(ray_x, ray_y, 0xFF0000, game);
+        ray_x += cos(player->angle);
+        ray_y += sin(player->angle);
+    }
+
     mlx_put_image_to_window(game->mlx, game->win, game->img, 0, 0);
 }
 

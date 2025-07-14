@@ -37,7 +37,7 @@ int key_press(int keycode, t_player *player)
     if (keycode == LEFT)
         player->left_rotate = true;
     if (keycode == RIGHT)
-        player->right_rotate = true
+        player->right_rotate = true;
     return (0);
 }
 
@@ -54,7 +54,7 @@ int key_release(int keycode, t_player *player)
     if (keycode == LEFT)
         player->left_rotate = false;
     if (keycode == RIGHT)
-        player->right_rotate = false
+        player->right_rotate = false;
     return (0);
 }
 
@@ -65,8 +65,8 @@ void move_player(t_player *player)
     float cos_angle;
     float sin_angle;
     
-    speed = 0.5;
-    angle_speed = 0.1;
+    speed = 1;
+    angle_speed = 0.01;
     cos_angle = cos(player->angle);
     sin_angle = sin(player->angle);
 
@@ -80,12 +80,25 @@ void move_player(t_player *player)
     if (player->angle < 0)
         player->angle = 2 * PI;
 
+    //bouge ou regarde le joueur
     if (player->key_up)
-        player->y -= speed;
+    {
+        player->x += cos_angle * speed;
+        player->y += sin_angle * speed;
+    }
     if (player->key_down)
-        player->y += speed;
+    {
+        player->x -= cos_angle * speed;
+        player->y -= sin_angle * speed;
+    }
     if (player->key_left)
-        player->x -= speed;
+    {
+        player->x += sin_angle * speed;
+        player->y -= cos_angle * speed;
+    }
     if (player->key_right)
-        player->x += speed;
+    {
+        player->x -= sin_angle * speed;
+        player->y += cos_angle * speed;
+    }
 }
