@@ -14,6 +14,7 @@
 
 #include <stdio.h>
 #include <stdbool.h>
+#include <stdlib.h>
 
 #define WIDHT 1280
 #define HEIGHT 720
@@ -21,18 +22,25 @@
 #define A 97
 #define S 115
 #define D 100
+#define LEFT 65361
+#define RIGHT 65363
 
 #define PI 3.141592653
+#define BLOCKSIZE 64
 
 typedef struct s_player
 {
     float x;
     float y;
+    float angle;
 
     bool key_up;
     bool key_down;
     bool key_right;
     bool key_left;
+
+    bool left_rotate;
+    bool right_rotate;
 } t_player; 
 
 typedef struct s_game
@@ -45,6 +53,7 @@ typedef struct s_game
     int size_line;
     int endian;
     t_player player;
+    char **map;
 } t_game;
 
 void init_player(float x, float y, t_player *player);

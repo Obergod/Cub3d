@@ -12,10 +12,11 @@
 
 #include "../../include/raycasting.h"
 
-void init_player(float x, float y, t_player *player)
+void init_player(float x, float y, float angle, t_player *player)
 {
     player->x = x;
     player->y = y;
+    player->angle = angle;
 
     player->key_down = false;
     player->key_right = false;
@@ -33,6 +34,10 @@ int key_press(int keycode, t_player *player)
         player->key_left = true;
     if (keycode == D)
         player->key_right = true;
+    if (keycode == LEFT)
+        player->left_rotate = true;
+    if (keycode == RIGHT)
+        player->right_rotate = true
     return (0);
 }
 
@@ -46,14 +51,35 @@ int key_release(int keycode, t_player *player)
         player->key_left = false;
     if (keycode == D)
         player->key_right = false;
+    if (keycode == LEFT)
+        player->left_rotate = false;
+    if (keycode == RIGHT)
+        player->right_rotate = false
     return (0);
 }
 
 void move_player(t_player *player)
 {
-    int speed;
+    float speed;
+    float angle_speed;
+    float cos_angle;
+    float sin_angle;
     
-    speed = 1;
+    speed = 0.5;
+    angle_speed = 0.1;
+    cos_angle = cos(player->angle);
+    sin_angle = sin(player->angle);
+
+    if (player->left_rotate)
+        player->angle -= angle_speed;
+    if (player->right_rotate)
+        player->angle += angle_speed;
+    
+    if (player->angle > 2 * PI)
+        player-> angle = 0;
+    if (player->angle < 0)
+        player->angle = 2 * PI;
+
     if (player->key_up)
         player->y -= speed;
     if (player->key_down)
