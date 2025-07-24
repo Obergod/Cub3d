@@ -6,7 +6,7 @@
 /*   By: ufalzone <ufalzone@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/08 16:16:48 by ufalzone          #+#    #+#             */
-/*   Updated: 2025/07/24 15:02:33 by ufalzone         ###   ########.fr       */
+/*   Updated: 2025/07/24 17:05:52 by ufalzone         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,11 @@
 
 #define PI 3.141592653
 #define BLOCKSIZE 64
+#define MINIMAP_BLOCKSIZE (BLOCKSIZE / 4)
+#define MINI_FACTOR ((float)MINIMAP_BLOCKSIZE / BLOCKSIZE)
+
+#define SKY_COLOR  0x87CEEB
+#define FLOOR_COLOR 0x006400
 
 typedef struct s_player
 {
@@ -52,6 +57,8 @@ typedef struct s_game
     char *data;
     int bpp;
     int size_line;
+    int nb_column;
+    int nb_lines;
     int endian;
     t_player player;
     char **map;
@@ -60,4 +67,5 @@ typedef struct s_game
 void init_player(float x, float y, float angle, t_player *player);
 int key_press(int keycode, t_player *player);
 int key_release(int keycode, t_player *player);
-void move_player(t_player *player);
+void move_player(t_player *player, t_game *game);
+bool touch(float px, float py, t_game *game);

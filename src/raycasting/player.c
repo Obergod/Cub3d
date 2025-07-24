@@ -6,7 +6,7 @@
 /*   By: ufalzone <ufalzone@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/08 16:54:45 by ufalzone          #+#    #+#             */
-/*   Updated: 2025/07/08 17:00:13 by ufalzone         ###   ########.fr       */
+/*   Updated: 2025/07/24 17:42:47 by ufalzone         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,17 +58,15 @@ int key_release(int keycode, t_player *player)
     return (0);
 }
 
-void move_player(t_player *player)
+void move_player(t_player *player, t_game *game)
 {
     float speed;
     float angle_speed;
     float cos_angle;
     float sin_angle;
     
-    speed = 1;
+    speed = 0.5;
     angle_speed = 0.01;
-    cos_angle = cos(player->angle);
-    sin_angle = sin(player->angle);
 
     if (player->left_rotate)
         player->angle -= angle_speed;
@@ -79,26 +77,44 @@ void move_player(t_player *player)
         player-> angle = 0;
     if (player->angle < 0)
         player->angle = 2 * PI;
+    cos_angle = cos(player->angle);
+    sin_angle = sin(player->angle);
 
     //bouge ou regarde le joueur
     if (player->key_up)
     {
-        player->x += cos_angle * speed;
-        player->y += sin_angle * speed;
+        float new_x = player->x + cos_angle * speed;
+        if (!touch((int)new_x, (int)player->y, game))
+            player->x = new_x;
+        float new_y = player->y + sin_angle * speed;
+        if (!touch((int)player->x, (int)new_y, game))
+            player->y = new_y; 
     }
     if (player->key_down)
     {
-        player->x -= cos_angle * speed;
-        player->y -= sin_angle * speed;
+        float new_x = player->x - cos_angle * speed;
+        if (!touch((int)new_x, (int)player->y, game))
+            player->x = new_x;
+        float new_y = player->y - sin_angle * speed;
+        if (!touch((int)player->x, (int)new_y, game))
+            player->y = new_y; 
     }
     if (player->key_left)
     {
-        player->x += sin_angle * speed;
-        player->y -= cos_angle * speed;
+        float new_x = player->x + sin_angle * speed;
+        if (!touch((int)new_x, (int)player->y, game))
+            player->x = new_x;
+        float new_y = player->y - cos_angle * speed;
+        if (!touch((int)player->x, (int)new_y, game))
+            player->y = new_y; 
     }
     if (player->key_right)
     {
-        player->x -= sin_angle * speed;
-        player->y += cos_angle * speed;
+        float new_x = player->x - sin_angle * speed;
+        if (!touch((int)new_x, (int)player->y, game))
+            player->x = new_x;
+        float new_y = player->y + cos_angle * speed;
+        if (!touch((int)player->x, (int)new_y, game))
+            player->y = new_y; 
     }
 }
