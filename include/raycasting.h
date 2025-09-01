@@ -1,0 +1,71 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   raycasting.h                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ufalzone <ufalzone@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/07/08 16:16:48 by ufalzone          #+#    #+#             */
+/*   Updated: 2025/07/24 17:05:52 by ufalzone         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "../minilibx-linux/mlx.h"
+
+#include <stdio.h>
+#include <stdbool.h>
+#include <stdlib.h>
+#include <math.h>
+
+#define WIDHT 1280
+#define HEIGHT 720
+# define W 119
+#define A 97
+#define S 115
+#define D 100
+#define LEFT 65361
+#define RIGHT 65363
+
+#define PI 3.141592653
+#define BLOCKSIZE 64
+#define MINIMAP_BLOCKSIZE (BLOCKSIZE / 4)
+#define MINI_FACTOR ((float)MINIMAP_BLOCKSIZE / BLOCKSIZE)
+
+#define SKY_COLOR  0x87CEEB
+#define FLOOR_COLOR 0x006400
+
+typedef struct s_player
+{
+    float x;
+    float y;
+    float angle;
+
+    bool key_up;
+    bool key_down;
+    bool key_right;
+    bool key_left;
+
+    bool left_rotate;
+    bool right_rotate;
+} t_player; 
+
+typedef struct s_game
+{
+    void *mlx;
+    void *win;
+    void *img;
+    char *data;
+    int bpp;
+    int size_line;
+    int nb_column;
+    int nb_lines;
+    int endian;
+    t_player player;
+    char **map;
+} t_game;
+
+void init_player(float x, float y, float angle, t_player *player);
+int key_press(int keycode, t_player *player);
+int key_release(int keycode, t_player *player);
+void move_player(t_player *player, t_game *game);
+bool touch(float px, float py, t_game *game);

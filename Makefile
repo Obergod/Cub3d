@@ -4,7 +4,7 @@ OBJ_DIR = obj
 
 # Repertorys
 SRCS_DIR = src/
-INCS_DIR = includes/
+INCS_DIR = include/
 
 # Libraries
 MLX_DIR = minilibx-linux/
@@ -18,7 +18,7 @@ LIBFT_URL = https://github.com/Obergod/full_libft.git
 
 # Compilation
 CC = gcc
-WFLAGS = -Wall -Werror -Wextra
+WFLAGS = -g3
 CFLAGS  = $(WFLAGS) -I$(INCS_DIR) -I$(LIBFT_DIR)/include -I$(MLX_DIR) -g3 -O3
 DEPFLAGS = -MMD -MP
 
@@ -87,4 +87,24 @@ fclean: clean
 
 re: fclean all
 
-.PHONY: all clean fclean re
+MLX_MAC_DIR = minilibx_opengl_20191021/
+
+macos: MLX_DIR = $(MLX_MAC_DIR)
+macos: MLX = $(MLX_DIR)libmlx.a
+macos: MLX_FLAGS = -L$(MLX_DIR) -lmlx -framework OpenGL -framework AppKit
+macos: CFLAGS := $(filter-out -I$(MLX_DIR), $(CFLAGS)) -I$(MLX_DIR) -DGL_SILENCE_DEPRECATION
+macos: $(MLX_MAC_DIR)libmlx.a $(OBJ_FILES)
+	@$(MAKE) -s -C $(LIBFT_DIR) fclean
+	@$(MAKE) -s -C $(LIBFT_DIR)
+	@printf "$(YELLOW)Linking for macos...$(RESET)"
+	@$(CC) $(CFLAGS) $(OBJ_FILES) $(LIBFT) $(MLX_FLAGS) -o $(NAME)
+	@printf "$(CLEAR)$(GREEN)✓ $(NAME) created for macOS!$(RESET)\n"
+
+
+$(MLX_MAC_DIR)libmlx.a:
+	@printf "$(YELLOW)Compilation mlx macos$(RESET)"
+	@for i in 1 2 3; do printf "."; sleep 0.2; done
+	@printf " $(GREEN)OK$(RESET)\n"
+	@$(MAKE) -s -C $(MLX_MAC_DIR)
+
+.PHONY: all macos clean fclean re
