@@ -36,13 +36,15 @@ int	check_map(char **cub)
 				c = map[i][j];
 				err++;
 			}
+			else if (map[i][j] != '0' && map[i][j] != '1' && map[i][j] != ' ')
+				return (free(map), 1);
 		}
 	}
 	if (err != 1)
-		return (1);
+		return (free(map), 1);
 	err = check_wall(map, c);
 	if (err != 0)
-		return (err);
+		return (free(map), err);
 	return (0);
 }
 
