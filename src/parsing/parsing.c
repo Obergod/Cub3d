@@ -40,6 +40,7 @@ int	check_errors(int fd, t_vars *vars)
 {
 	char	**cub;
 	int		err;
+	char	**textures;
 
 	cub = split_all_file(fd);
 	if (!cub)
@@ -50,6 +51,9 @@ int	check_errors(int fd, t_vars *vars)
 	err = check_map(cub);
 	if (err != 0)
 		return (err);
+	textures = init_textures(cub);
+	if (!textures)
+		return (-1);
 	//must check if nothing after map + gotta split map
 	return (0);
 }

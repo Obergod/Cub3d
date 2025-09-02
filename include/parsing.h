@@ -44,6 +44,8 @@ int		check_map(char **cub);
 int		test_image(t_vars *vars, char *texture);
 int		check_colors(char *texture);
 t_vars	*inits(void);
+int	set_texture(char *cub, char *texture, int *text_count, int *count_cub);
+char **init_textures(char **cub);
 
 
 
