@@ -81,6 +81,6 @@ int	set_texture(char *cub, char *texture, int *text_count, int *count_cub)
 	if (!texture)
 		return (-1);
 	(*text_count)++;
-	(*count_cub) = 0;
+	(*count_cub) = -1;
 	return (0);
 }
