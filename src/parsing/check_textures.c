@@ -21,8 +21,11 @@ int	check_textures(char **cub, t_vars *vars)
 	nb_texture = 0;
 	i = -1;
 	//find a way to check if ! NO + NO
+	// after sort check NO + NO
 	while (cub[++i])
 	{
+		if (check_double(cub, i) == 1)
+			return (1);
 		if (!ft_strncmp(cub[i], "NO ", 3) || !ft_strncmp(cub[i], "SO ", 3) || 
 				!ft_strncmp(cub[i], "WE ", 3) || !ft_strncmp(cub[i], "EA ", 3))
 		{
@@ -39,6 +42,20 @@ int	check_textures(char **cub, t_vars *vars)
 	}
 	if (nb_texture != 6)
 		return (1);
+	return (0);
+}
+
+int	check_double(char **cub, int i)
+{
+	int	j;
+
+	j = i + 1;
+	while (j < 6)
+	{
+		if (!ft_strncmp(cub[i], cub[j], 2))
+			return (1);
+		j++;
+	}
 	return (0);
 }
 
