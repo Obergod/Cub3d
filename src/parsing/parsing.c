@@ -6,7 +6,7 @@
 /*   By: mafioron <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/30 17:08:00 by mafioron          #+#    #+#             */
-/*   Updated: 2025/11/07 16:13:09 by mafioron         ###   ########.fr       */
+/*   Updated: 2025/11/07 17:05:33 by mafioron         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ int	check_errors(int fd, t_cub *cub)
 	err = check_textures(cub_file, cub);
 	if (err != 0)
 		return (err);
-	err = check_map(cub_file, cub->map);
+	err = check_map(cub_file, cub);
 	if (err != 0)
 		return (err);
 	textures = init_textures(cub_file);
@@ -56,7 +56,6 @@ int	check_errors(int fd, t_cub *cub)
 		return (-1);
 	return (0);
 }
-
 
 
 
@@ -73,7 +72,7 @@ int	main(int ac, char **av)
 	vars = inits();
 	if (!vars)
 		return (printf("Error\n"), 1);
-	if (check_errors(fd, vars) == 1)
+	if (check_errors(fd, vars) == -1)
 		printf("Error cub\n");
 	return (0);
 }
