@@ -6,7 +6,7 @@
 /*   By: ufalzone <ufalzone@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/08 16:15:38 by ufalzone          #+#    #+#             */
-/*   Updated: 2025/07/24 17:03:13 by ufalzone         ###   ########.fr       */
+/*   Updated: 2025/11/07 16:07:41 by ufalzone         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -233,7 +233,7 @@ int draw_loop(t_game *game)
     // Sens concret :
     // Entre la colonne 0 et la colonne 1, on tourne la tête de 0,09375°.
 
-    // Après 640 incréments, on aura parcouru les 60° complets.
+    // apres 640 increments, on aura parcouru les 60° complets.
 
     // printf("fraction : %f\n", fraction);
     float start_x = player->angle - PI / 6;
@@ -250,6 +250,14 @@ int draw_loop(t_game *game)
     mlx_put_image_to_window(game->mlx, game->win, game->img, 0, 0);
 }
 
+int close_window(t_game *game)
+{
+    mlx_destroy_image(game->mlx,game->img);
+    mlx_destroy_window(game->mlx,game->win);
+    //tout free
+    exit(0);
+}
+
 int main()
 {
     t_game game;
@@ -257,6 +265,9 @@ int main()
     init_game(&game);
     mlx_hook(game.win, 2, 1L<<0, key_press, &game.player);
     mlx_hook(game.win, 3, 1L<<1, key_release, &game.player);
+    
+    mlx_hook(game.win, 17, 0, close_window, &game);
+
 
     mlx_loop_hook(game.mlx, draw_loop, &game);
     mlx_loop(game.mlx);
