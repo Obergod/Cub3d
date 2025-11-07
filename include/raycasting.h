@@ -6,11 +6,12 @@
 /*   By: ufalzone <ufalzone@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/08 16:16:48 by ufalzone          #+#    #+#             */
-/*   Updated: 2025/07/24 17:05:52 by ufalzone         ###   ########.fr       */
+/*   Updated: 2025/11/07 16:27:39 by ufalzone         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../minilibx-linux/mlx.h"
+#include "parsing.h"
 
 #include <stdio.h>
 #include <stdbool.h>
@@ -51,9 +52,6 @@ typedef struct s_player
 
 typedef struct s_game
 {
-    void *mlx;
-    void *win;
-    void *img;
     char *data;
     int bpp;
     int size_line;
@@ -61,6 +59,7 @@ typedef struct s_game
     int nb_lines;
     int endian;
     t_player player;
+    t_cub *cub;
     char **map;
 } t_game;
 
