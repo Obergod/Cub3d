@@ -49,7 +49,6 @@ int	check_errors(int fd, t_cub *cub)
 	if (err != 0)
 		return (err);
 	err = check_map(cub_file, cub);
-	err = check_map(cub_file, cub);
 	if (err != 0)
 		return (err);
 	textures = init_textures(cub_file);

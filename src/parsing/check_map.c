@@ -111,7 +111,7 @@ void	flood_fill(char **map, int row, int col, bool *is_valid)
 		*is_valid = false;
 		return ;
 	}
-	if (map[col][row] == 'x' || map[col][row] == '1')
+	if (map[col][row] == 'x' || map[col][row] == '1' || map[col][row] == ' ')
 		return ;
 	if (map[col][row] != '0')
 	{
