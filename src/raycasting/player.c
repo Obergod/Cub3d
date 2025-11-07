@@ -22,6 +22,8 @@ void init_player(float x, float y, float angle, t_player *player)
     player->key_right = false;
     player->key_left = false;
     player->key_up = false;   
+    player->left_rotate = false;
+    player->right_rotate = false;
 }
 
 int key_press(int keycode, t_player *player)

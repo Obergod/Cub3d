@@ -28,6 +28,11 @@ t_cub	*inits(void)
 	cub->textures = NULL;
 	cub->height = 32;
 	cub->width = 32;
+	cub->map_height = 0;
+	cub->map_width = 0;
+	cub->player_row = -1;
+	cub->player_col = -1;
+	cub->player_dir = '\0';
 	return (cub);
 }
 

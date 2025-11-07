@@ -6,7 +6,7 @@
 /*   By: ufalzone <ufalzone@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/08 16:15:38 by ufalzone          #+#    #+#             */
-/*   Updated: 2025/11/07 16:51:12 by ufalzone         ###   ########.fr       */
+/*   Updated: 2025/11/07 17:28:09 by ufalzone         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,6 +113,29 @@ char **get_map(void)
     return (map);
 }
 
+static float	player_angle_from_dir(char dir)
+{
+	if (dir == 'N')
+		return (3 * PI / 2);
+	if (dir == 'S')
+		return (PI / 2);
+	if (dir == 'W')
+		return (PI);
+	return (0);
+}
+
+static void	set_player_from_map(t_game *game)
+{
+	float	x;
+	float	y;
+	float	angle;
+
+	x = (game->cub->player_col + 0.5f) * BLOCKSIZE;
+	y = (game->cub->player_row + 0.5f) * BLOCKSIZE;
+	angle = player_angle_from_dir(game->cub->player_dir);
+	init_player(x, y, angle, &game->player);
+}
+
 void clear_image(t_game *game)
 {
     int y;
@@ -133,10 +156,14 @@ void clear_image(t_game *game)
 
 void init_game(t_game *game)
 {
-    init_player(WIDHT / 2, HEIGHT / 2, PI / 2, &game->player);
     game->map = game->cub->map;
-    game->nb_column = 15;
-    game->nb_lines = 10;
+    set_player_from_map(game);
+    game->nb_column = game->cub->map_width;
+    game->nb_lines = game->cub->map_height;
+    if (game->nb_column <= 0)
+        game->nb_column = 1;
+    if (game->nb_lines <= 0)
+        game->nb_lines = 1;
     game->cub->win = mlx_new_window(game->cub->mlx, WIDHT, HEIGHT, "Cub3D");
     game->cub->img = mlx_new_image(game->cub->mlx, WIDHT, HEIGHT);
     game->data = mlx_get_data_addr(game->cub->img, &game->bpp, &game->size_line, &game->endian);
@@ -146,9 +173,24 @@ void init_game(t_game *game)
 
 bool touch(float px, float py, t_game *game)
 {
-    int x = px / BLOCKSIZE;
-    int y = py / BLOCKSIZE;
-    if (game->map[y][x] == '1')
+    int x;
+    int y;
+    int len;
+    char cell;
+
+    if (px < 0 || py < 0)
+        return true;
+    y = py / BLOCKSIZE;
+    if (y < 0 || y >= game->cub->map_height)
+        return true;
+    x = px / BLOCKSIZE;
+    if (!game->map || !game->map[y])
+        return true;
+    len = ft_strlen(game->map[y]);
+    if (x < 0 || x >= len)
+        return true;
+    cell = game->map[y][x];
+    if (cell == '1' || cell == ' ')
         return true;
     return false;
 }
@@ -187,6 +229,8 @@ void draw_line(t_player *player, t_game *game, float start_x, int i)
     }
 
     float dist = fixed_dist(player->x, player->y, ray_x, ray_y, game);
+    if (dist < 0.0001f)
+        dist = 0.0001f;
     float height = (BLOCKSIZE / dist) * (WIDHT / 2);
     int start_y = (HEIGHT - height) / 2;
     int end = start_y + height;
@@ -258,21 +302,23 @@ int close_window(t_game *game)
     exit(0);
 }
 
-int init_parsing(t_cub *vars, int ac, char **av)
+t_cub *init_parsing(int ac, char **av)
 {
     int	fd;
+    t_cub *vars;
 
 	if (ac != 2)
-		return (printf("Error\n"), 1);
+		return (printf("Error\n"), NULL);
 	fd = open(av[1], O_RDONLY);
 	if (fd < 0)
-		return (printf("Error\n"), 1);
+		return (printf("Error\n"), NULL);
 	vars = inits();
 	if (!vars)
-		return (printf("Error\n"), 1);
+		return (printf("Error\n"), NULL);
 	if (check_errors(fd, vars) == 1)
-		printf("Error cub\n");
-	return (0);
+		return (printf("Error cub\n"), NULL);
+    printf("Tout est bon!");
+	return (vars);
 }
 
 int print_map(char **av)
@@ -293,8 +339,10 @@ int main(int ac, char **av)
     t_game game;
     t_cub *vars;
 
-    init_parsing(vars, ac, av);
-    print_map(vars->map);
+    vars = init_parsing(ac, av);
+    if (!vars)
+        return (1);
+    // print_map(vars->map);
     game.cub = vars;
     init_game(&game);
     mlx_hook(game.cub->win, 2, 1L<<0, key_press, &game.player);

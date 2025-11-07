@@ -32,6 +32,11 @@ typedef struct s_cub
 	char	**textures;
 	int		height;
 	int		width;
+	int		map_height;
+	int		map_width;
+	int		player_row;
+	int		player_col;
+	char	player_dir;
 }	t_cub;
 
 
@@ -39,15 +44,15 @@ typedef struct s_cub
 int		check_textures(char **cub, t_cub *vars);
 void	flood_fill(char **map, int row, int col, bool *is_valid);
 int		only_textures(char *texture);
-int		check_wall(char **map, char c);
+int		check_wall(char **map, int row, int col);
 int		check_map(char **cub_file, t_cub *cub);
 int		test_image(t_cub *cub, char *texture);
 int		check_colors(char *texture);
 t_cub	*inits(void);
 int		set_texture(char *cub, char *texture, int *text_count, int *count_cub);
-char 	**init_textures(char **cub);
+char	**init_textures(char **cub);
 int		check_double(char **cub, int i);
-int	check_errors(int fd, t_cub *cub);
+int		check_errors(int fd, t_cub *cub);
 
 
 

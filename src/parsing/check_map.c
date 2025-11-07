@@ -12,47 +12,78 @@
 
 #include "../../include/parsing.h"
 
+static int	is_player(char c)
+{
+	return (c == 'N' || c == 'S' || c == 'E' || c == 'W');
+}
+
+static int	save_player(t_cub *cub, int row, int col, char dir)
+{
+	if (cub->player_dir != '\0')
+		return (1);
+	cub->player_row = row;
+	cub->player_col = col;
+	cub->player_dir = dir;
+	return (0);
+}
+
+static int	check_tile(t_cub *cub, char **map, int row, int col)
+{
+	if (is_player(map[row][col]))
+	{
+		if (save_player(cub, row, col, map[row][col]))
+			return (1);
+		map[row][col] = '0';
+		return (0);
+	}
+	if (map[row][col] == '0' || map[row][col] == '1' || map[row][col] == ' ')
+		return (0);
+	return (1);
+}
+
 int	check_map(char **cub_file, t_cub *cub)
 {
 	char	**map;
 	int		err;
 	int		i;
 	int		j;
-	char	c;
+	int		len;
 
 	i = -1;
-	err = 0;
 	map = ft_2dstrdup(cub_file + 6);
 	if (!map)
 		return (-1);
 	while (map[++i])
 	{
-		j = 0;
+		len = ft_strlen(map[i]);
+		if (len > cub->map_width)
+			cub->map_width = len;
+		j = -1;
 		while (map[i][++j])
-		{
-			if (map[i][j] == 'N' || map[i][j] == 'W' || 
-					map[i][j] == 'S' || map[i][j] == 'E')
+			if (check_tile(cub, map, i, j))
 			{
-				c = map[i][j];
-				err++;
+				ft_free_split(map);
+				return (1);
 			}
-			else if (map[i][j] != '0' && map[i][j] != '1' && map[i][j] != ' ')
-				return (free(map), 1);
-		}
 	}
-	if (err != 1)
-		return (free(map), 1);
-	err = check_wall(map, c);
+	cub->map_height = i;
+	if (cub->player_dir == '\0')
+	{
+		ft_free_split(map);
+		return (1);
+	}
+	err = check_wall(map, cub->player_col, cub->player_row);
 	if (err != 0)
-		return (free(map), err);
+	{
+		ft_free_split(map);
+		return (err);
+	}
 	cub->map = map;
 	return (0);
 }
 
-int	check_wall(char **map, char c)
+int	check_wall(char **map, int row, int col)
 {
-	int	row;
-	int	col;
 	char	**flood_map;
 	bool	is_valid_map;
 
@@ -60,25 +91,16 @@ int	check_wall(char **map, char c)
 	flood_map = ft_2dstrdup(map);
 	if (!flood_map)
 		return (-1);
-	col = -1;
-	row = 0;
-	while (map[++col])
+	if (row < 0 || col < 0 || !flood_map[col]
+		|| (int)ft_strlen(flood_map[col]) <= row)
 	{
-		row = 0;
-		while (map[col][row] && map[col][row] != c)
-			row++;
-		if (map[col][row] == c)
-			break ;
+		ft_free_split(flood_map);
+		return (1);
 	}
-	if (flood_map[col] && flood_map[col][row])
-		flood_map[col][row] = '0';
 	flood_fill(flood_map, row, col, &is_valid_map);
 	ft_free_split(flood_map);
 	if (is_valid_map == false)
-	{
-		ft_free_split(map);
 		return (1);
-	}
 	return (0);
 }
 

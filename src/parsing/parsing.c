@@ -6,7 +6,7 @@
 /*   By: ufalzone <ufalzone@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/30 17:08:00 by mafioron          #+#    #+#             */
-/*   Updated: 2025/11/07 17:18:02 by ufalzone         ###   ########.fr       */
+/*   Updated: 2025/11/07 17:21:32 by ufalzone         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,37 +55,5 @@ int	check_errors(int fd, t_cub *cub)
 	textures = init_textures(cub_file);
 	if (!textures)
 		return (-1);
-	return (0);
-}
-
-
-
-// int	main(int ac, char **av)
-// {
-// 	int	fd;
-// 	t_cub *vars;
-
-	if (ac != 2)
-		return (printf("Error\n"), 1);
-	fd = open(av[1], O_RDONLY);
-	if (fd < 0)
-		return (printf("Error\n"), 1);
-	vars = inits();
-	if (!vars)
-		return (printf("Error\n"), 1);
-	if (check_errors(fd, vars) == -1)
-		printf("Error cub\n");
-	return (0);
-}
-	if (ac != 2)
-		return (printf("Error\n"), 1);
-	fd = open(av[1], O_RDONLY);
-	if (fd < 0)
-		return (printf("Error\n"), 1);
-	vars = inits();
-	if (!vars)
-		return (printf("Error\n"), 1);
-	if (check_errors(fd, vars) == -1)
-		printf("Error cub\n");
 	return (0);
 }
