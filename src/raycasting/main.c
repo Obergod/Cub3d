@@ -6,7 +6,7 @@
 /*   By: ufalzone <ufalzone@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/08 16:15:38 by ufalzone          #+#    #+#             */
-/*   Updated: 2025/11/07 18:39:11 by ufalzone         ###   ########.fr       */
+/*   Updated: 2025/11/07 19:23:05 by ufalzone         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -298,6 +298,8 @@ int close_window(t_game *game)
 {
     mlx_destroy_image(game->cub->mlx,game->cub->img);
     mlx_destroy_window(game->cub->mlx,game->cub->win);
+    mlx_destroy_display(game->cub->mlx);
+    free(game->cub->mlx);
     //tout free
     exit(0);
 }
@@ -316,7 +318,7 @@ t_cub *init_parsing(int ac, char **av)
 	if (!vars)
 		return (printf("Error\n"), NULL);
 	if (check_errors(fd, vars) == 1)
-		return (printf("Error cub\n"), NULL);
+		return (printf("Error\n"), NULL);
     printf("Tout est bon!");
 	return (vars);
 }
