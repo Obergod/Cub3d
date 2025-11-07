@@ -6,7 +6,7 @@
 /*   By: mafioron <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/30 17:08:16 by mafioron          #+#    #+#             */
-/*   Updated: 2025/11/07 19:04:52 by mafioron         ###   ########.fr       */
+/*   Updated: 2025/11/07 20:10:19 by mafioron         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,8 @@
 # define SO_TEXT 1
 # define WE_TEXT 2
 # define EA_TEXT 3
+# define FLOOR 4
+# define CEILING 5
 
 typedef struct s_cub
 {
@@ -54,7 +56,7 @@ int		check_map(char **cub_file, t_cub *cub);
 int		test_image(t_cub *cub, char *texture);
 int		check_colors(char *texture);
 t_cub	*inits(void);
-int		set_texture(char *cub, char *texture, int *text_count, int *count_cub);
+int		set_texture(char *cub, char **texture, int *text_count, int *count_cub);
 char	**init_textures(char **cub);
 int		check_double(char **cub, int i);
 int		check_errors(int fd, t_cub *cub);

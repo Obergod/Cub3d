@@ -6,7 +6,7 @@
 /*   By: mafioron <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/08 16:10:45 by mafioron          #+#    #+#             */
-/*   Updated: 2025/11/07 15:58:13 by mafioron         ###   ########.fr       */
+/*   Updated: 2025/11/07 20:39:34 by mafioron         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,17 +67,17 @@ int	check_colors(char *texture)
 		return (1);
 	color = ft_split(texture + i, ',');
 	if (!color)
-		return (1);
+		return (ft_free_split(color), 1);
 	i = -1;
 	while (color[++i])
 	{
 		rgb = ft_atol(color[i]);
 		if (rgb < 0 || rgb > 255)
-			return (1);
+			return (ft_free_split(color), 1);
 	}
-	free(color);
+	ft_free_split(color);
 	if (i != 3)
-		return (1);
+		return (ft_free_split(color), 1);
 	return (0);
 }
 

@@ -6,7 +6,7 @@
 /*   By: ufalzone <ufalzone@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/08 16:15:38 by ufalzone          #+#    #+#             */
-/*   Updated: 2025/11/07 19:37:25 by ufalzone         ###   ########.fr       */
+/*   Updated: 2025/11/07 20:34:31 by mafioron         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -300,7 +300,6 @@ int close_window(t_game *game)
     mlx_destroy_window(game->cub->mlx,game->cub->win);
     mlx_destroy_display(game->cub->mlx);
     free_cub(game->cub);
-    free(game->cub->mlx);
     //tout free
     exit(0);
 }

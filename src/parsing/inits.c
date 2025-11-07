@@ -6,7 +6,7 @@
 /*   By: mafioron <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/04 17:53:28 by mafioron          #+#    #+#             */
-/*   Updated: 2025/11/07 16:50:15 by mafioron         ###   ########.fr       */
+/*   Updated: 2025/11/07 20:26:29 by mafioron         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,17 +51,17 @@ char **init_textures(char **cub)
 	while (++i < 6)
 	{
 		if (!ft_strncmp(cub[i], "NO ", 3) && j == 0)
-			err = set_texture(cub[i], textures[j], &j, &i);
+			err = set_texture(cub[i], &textures[j], &j, &i);
 		else if (!ft_strncmp(cub[i], "SO ", 3) && j == 1)
-			err = set_texture(cub[i], textures[j], &j, &i);
+			err = set_texture(cub[i], &textures[j], &j, &i);
 		else if (!ft_strncmp(cub[i], "WE ", 3) && j == 2)
-			err = set_texture(cub[i], textures[j], &j, &i);
+			err = set_texture(cub[i], &textures[j], &j, &i);
 		else if (!ft_strncmp(cub[i], "EA ", 3) && j == 3)
-			err = set_texture(cub[i], textures[j], &j, &i);
+			err = set_texture(cub[i], &textures[j], &j, &i);
 		else if (!ft_strncmp(cub[i], "F ", 2) && j == 4)
-			err = set_texture(cub[i], textures[j], &j, &i);
+			err = set_texture(cub[i], &textures[j], &j, &i);
 		else if (!ft_strncmp(cub[i], "C ", 2) && j == 5)
-			err = set_texture(cub[i], textures[j], &j, &i);
+			err = set_texture(cub[i], &textures[j], &j, &i);
 		if (err == -1)
 			return (ft_free_split(textures), NULL);
 	}
@@ -71,7 +71,7 @@ char **init_textures(char **cub)
 	return (textures);
 }
 
-int	set_texture(char *cub, char *texture, int *text_count, int *count_cub)
+int	set_texture(char *cub, char **texture, int *text_count, int *count_cub)
 {
 	int	i;
 
@@ -79,8 +79,8 @@ int	set_texture(char *cub, char *texture, int *text_count, int *count_cub)
 
 	while (cub[i] == ' ')
 		i++;
-	texture = ft_strdup(cub + i);
-	if (!texture)
+	*texture = ft_strdup(cub + i);
+	if (!*texture)
 		return (-1);
 	(*text_count)++;
 	(*count_cub) = -1;

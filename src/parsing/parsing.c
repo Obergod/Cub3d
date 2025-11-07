@@ -6,7 +6,7 @@
 /*   By: ufalzone <ufalzone@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/30 17:08:00 by mafioron          #+#    #+#             */
-/*   Updated: 2025/11/07 17:21:32 by ufalzone         ###   ########.fr       */
+/*   Updated: 2025/11/07 20:35:56 by mafioron         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@ char	**split_all_file(int fd)
 			return (NULL);
 	}
 	cub = ft_split(stock, '\n');
+	free(stock);
 	if (!cub)
 		return (NULL);
 	return (cub);
@@ -40,19 +41,19 @@ int	check_errors(int fd, t_cub *cub)
 {
 	char	**cub_file;
 	int		err;
-	char	**textures;
 
 	cub_file = split_all_file(fd);
 	if (!cub_file)
 		return (-1);
 	err = check_textures(cub_file, cub);
 	if (err != 0)
-		return (err);
+		return (ft_free_split(cub_file), err);
 	err = check_map(cub_file, cub);
 	if (err != 0)
-		return (err);
-	textures = init_textures(cub_file);
-	if (!textures)
-		return (-1);
+		return (ft_free_split(cub_file), err);
+	cub->textures = init_textures(cub_file);
+	if (!cub->textures)
+		return (ft_free_split(cub_file), -1);
+	ft_free_split(cub_file);
 	return (0);
 }
