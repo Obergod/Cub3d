@@ -6,7 +6,7 @@
 /*   By: ufalzone <ufalzone@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/08 16:15:38 by ufalzone          #+#    #+#             */
-/*   Updated: 2025/11/07 17:28:09 by ufalzone         ###   ########.fr       */
+/*   Updated: 2025/11/07 18:39:11 by ufalzone         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,8 +89,8 @@ void draw_minimap(t_game *game, t_player *player)
     
     draw_map(game, origin_x, origin_y);
 
-    int mini_px = origin_x + (int)(player->x * MINI_FACTOR);
-    int mini_py = origin_y + (int)(player->y * MINI_FACTOR);
+    int mini_px = origin_x + (int)(player->x * MINI_FACTOR) + MINIMAP_BLOCKSIZE / 2;
+    int mini_py = origin_y + (int)(player->y * MINI_FACTOR) + MINIMAP_BLOCKSIZE / 2;
 
     draw_square(mini_px - 2, mini_py - 2, 4, 0x00FF, game);
 }
