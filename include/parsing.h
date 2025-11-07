@@ -58,6 +58,7 @@ int		set_texture(char *cub, char *texture, int *text_count, int *count_cub);
 char	**init_textures(char **cub);
 int		check_double(char **cub, int i);
 int		check_errors(int fd, t_cub *cub);
+void free_cub(t_cub *cub);
 
 
 

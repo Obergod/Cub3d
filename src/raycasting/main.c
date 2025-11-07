@@ -6,7 +6,7 @@
 /*   By: ufalzone <ufalzone@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/08 16:15:38 by ufalzone          #+#    #+#             */
-/*   Updated: 2025/11/07 19:23:05 by ufalzone         ###   ########.fr       */
+/*   Updated: 2025/11/07 19:37:25 by ufalzone         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -299,6 +299,7 @@ int close_window(t_game *game)
     mlx_destroy_image(game->cub->mlx,game->cub->img);
     mlx_destroy_window(game->cub->mlx,game->cub->win);
     mlx_destroy_display(game->cub->mlx);
+    free_cub(game->cub);
     free(game->cub->mlx);
     //tout free
     exit(0);
@@ -349,10 +350,7 @@ int main(int ac, char **av)
     init_game(&game);
     mlx_hook(game.cub->win, 2, 1L<<0, key_press, &game.player);
     mlx_hook(game.cub->win, 3, 1L<<1, key_release, &game.player);
-    
     mlx_hook(game.cub->win, 17, 0, close_window, &game);
-
-
     mlx_loop_hook(game.cub->mlx, draw_loop, &game);
     mlx_loop(game.cub->mlx);
 }
