@@ -6,7 +6,7 @@
 /*   By: mafioron <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/30 17:08:16 by mafioron          #+#    #+#             */
-/*   Updated: 2025/11/07 17:04:32 by mafioron         ###   ########.fr       */
+/*   Updated: 2025/11/07 19:04:52 by mafioron         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,11 @@
 
 # define WIN_WIDTH 1920
 # define WIN_HEIGHT 1080
+
+# define NO_TEXT 0
+# define SO_TEXT 1
+# define WE_TEXT 2
+# define EA_TEXT 3
 
 typedef struct s_cub
 {
