@@ -89,8 +89,8 @@ void draw_minimap(t_game *game, t_player *player)
     
     draw_map(game, origin_x, origin_y);
 
-    int mini_px = origin_x + (int)(player->x * MINI_FACTOR) + MINIMAP_BLOCKSIZE / 2;
-    int mini_py = origin_y + (int)(player->y * MINI_FACTOR) + MINIMAP_BLOCKSIZE / 2;
+    int mini_px = origin_x + (int)(player->x * MINI_FACTOR);
+    int mini_py = origin_y + (int)(player->y * MINI_FACTOR);
 
     draw_square(mini_px - 2, mini_py - 2, 4, 0x00FF, game);
 }
