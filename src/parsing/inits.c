@@ -6,7 +6,7 @@
 /*   By: mafioron <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/04 17:53:28 by mafioron          #+#    #+#             */
-/*   Updated: 2025/11/07 15:56:47 by mafioron         ###   ########.fr       */
+/*   Updated: 2025/11/07 16:50:15 by mafioron         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,7 @@ char **init_textures(char **cub)
 
 	i = -1;
 	j = 0;
+	textures = malloc(sizeof(char *) * 7);
 	if (!textures)
 		return (NULL);
 	while (++i < 6)

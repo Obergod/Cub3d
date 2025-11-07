@@ -6,13 +6,13 @@
 /*   By: mafioron <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/08 16:09:02 by mafioron          #+#    #+#             */
-/*   Updated: 2025/11/07 16:10:25 by mafioron         ###   ########.fr       */
+/*   Updated: 2025/11/07 17:05:27 by mafioron         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/parsing.h"
 
-int	check_map(char **cub, char** cub_map)
+int	check_map(char **cub_file, t_cub *cub)
 {
 	char	**map;
 	int		err;
@@ -22,7 +22,7 @@ int	check_map(char **cub, char** cub_map)
 
 	i = -1;
 	err = 0;
-	map = ft_2dstrdup(cub + 6);
+	map = ft_2dstrdup(cub_file + 6);
 	if (!map)
 		return (-1);
 	while (map[++i])
@@ -45,7 +45,7 @@ int	check_map(char **cub, char** cub_map)
 	err = check_wall(map, c);
 	if (err != 0)
 		return (free(map), err);
-	cub_map = map;
+	cub->map = map;
 	return (0);
 }
 
@@ -54,10 +54,9 @@ int	check_wall(char **map, char c)
 	int	row;
 	int	col;
 	char	**flood_map;
-	// put in struct in a good way later
-	bool	is_valid_map = true;
+	bool	is_valid_map;
 
-	// Maybe isolate the map from the texture here ? ex : map + 5
+	is_valid_map = true;
 	flood_map = ft_2dstrdup(map);
 	if (!flood_map)
 		return (-1);
