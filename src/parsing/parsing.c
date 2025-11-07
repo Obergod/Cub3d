@@ -6,7 +6,7 @@
 /*   By: mafioron <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/30 17:08:00 by mafioron          #+#    #+#             */
-/*   Updated: 2025/06/30 17:08:02 by mafioron         ###   ########.fr       */
+/*   Updated: 2025/11/07 16:13:09 by mafioron         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,25 +36,24 @@ char	**split_all_file(int fd)
 	return (cub);
 }
 
-int	check_errors(int fd, t_vars *vars)
+int	check_errors(int fd, t_cub *cub)
 {
-	char	**cub;
+	char	**cub_file;
 	int		err;
 	char	**textures;
 
-	cub = split_all_file(fd);
-	if (!cub)
+	cub_file = split_all_file(fd);
+	if (!cub_file)
 		return (-1);
-	err = check_textures(cub, vars);
+	err = check_textures(cub_file, cub);
 	if (err != 0)
 		return (err);
-	err = check_map(cub);
+	err = check_map(cub_file, cub->map);
 	if (err != 0)
 		return (err);
-	textures = init_textures(cub);
+	textures = init_textures(cub_file);
 	if (!textures)
 		return (-1);
-	//must check if nothing after map + gotta split map
 	return (0);
 }
 
@@ -64,7 +63,7 @@ int	check_errors(int fd, t_vars *vars)
 int	main(int ac, char **av)
 {
 	int	fd;
-	t_vars *vars;
+	t_cub *vars;
 
 	if (ac != 2)
 		return (printf("Error\n"), 1);

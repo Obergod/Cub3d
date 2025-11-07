@@ -6,13 +6,13 @@
 /*   By: mafioron <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/08 16:09:02 by mafioron          #+#    #+#             */
-/*   Updated: 2025/07/08 16:09:03 by mafioron         ###   ########.fr       */
+/*   Updated: 2025/11/07 16:10:25 by mafioron         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/parsing.h"
 
-int	check_map(char **cub)
+int	check_map(char **cub, char** cub_map)
 {
 	char	**map;
 	int		err;
@@ -45,6 +45,7 @@ int	check_map(char **cub)
 	err = check_wall(map, c);
 	if (err != 0)
 		return (free(map), err);
+	cub_map = map;
 	return (0);
 }
 

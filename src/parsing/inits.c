@@ -6,29 +6,29 @@
 /*   By: mafioron <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/04 17:53:28 by mafioron          #+#    #+#             */
-/*   Updated: 2025/07/04 17:53:29 by mafioron         ###   ########.fr       */
+/*   Updated: 2025/11/07 15:56:47 by mafioron         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/parsing.h"
 
-t_vars	*inits(void)
+t_cub	*inits(void)
 {
-	t_vars *vars;
+	t_cub *cub;
 
-	vars = malloc(sizeof(t_vars));
-	if (!vars)
+	cub = malloc(sizeof(t_cub));
+	if (!cub)
 		return (NULL);
-	vars->mlx = mlx_init();
-	if (!vars->mlx)
-		return (free(vars), NULL);
-	vars->win = NULL;
-	vars->img = NULL;
-	vars->map = NULL;
-	vars->textures = NULL;
-	vars->height = 32;
-	vars->width = 32;
-	return (vars);
+	cub->mlx = mlx_init();
+	if (!cub->mlx)
+		return (free(cub), NULL);
+	cub->win = NULL;
+	cub->img = NULL;
+	cub->map = NULL;
+	cub->textures = NULL;
+	cub->height = 32;
+	cub->width = 32;
+	return (cub);
 }
 
 char **init_textures(char **cub)
@@ -40,13 +40,10 @@ char **init_textures(char **cub)
 
 	i = -1;
 	j = 0;
-	textures = malloc(sizeof(char *) * 7);
 	if (!textures)
 		return (NULL);
 	while (++i < 6)
 	{
-	//	printf("count %d\n", j);
-	//	printf ("%s\n", cub[i]);
 		if (!ft_strncmp(cub[i], "NO ", 3) && j == 0)
 			err = set_texture(cub[i], textures[j], &j, &i);
 		else if (!ft_strncmp(cub[i], "SO ", 3) && j == 1)
@@ -77,7 +74,6 @@ int	set_texture(char *cub, char *texture, int *text_count, int *count_cub)
 	while (cub[i] == ' ')
 		i++;
 	texture = ft_strdup(cub + i);
-	printf ("%s\n", texture);
 	if (!texture)
 		return (-1);
 	(*text_count)++;

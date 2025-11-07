@@ -6,22 +6,19 @@
 /*   By: mafioron <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/08 16:10:45 by mafioron          #+#    #+#             */
-/*   Updated: 2025/07/08 16:10:51 by mafioron         ###   ########.fr       */
+/*   Updated: 2025/11/07 15:58:13 by mafioron         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/parsing.h"
 
-//	think about how to do textures, linked lists or strncmp
-int	check_textures(char **cub, t_vars *vars)
+int	check_textures(char **cub, t_cub *vars)
 {
 	int	 i;
 	int	nb_texture;
 
 	nb_texture = 0;
 	i = -1;
-	//find a way to check if ! NO + NO
-	// after sort check NO + NO
 	while (cub[++i])
 	{
 		if (check_double(cub, i) == 1)
@@ -63,7 +60,7 @@ int	check_colors(char *texture)
 {
 	int		i;
 	char	**color;
-	int		rgb;
+	long	rgb;
 
 	i = only_textures(texture);
 	if (i == -1)
@@ -74,7 +71,7 @@ int	check_colors(char *texture)
 	i = -1;
 	while (color[++i])
 	{
-		rgb = ft_atoi(color[i]);
+		rgb = ft_atol(color[i]);
 		if (rgb < 0 || rgb > 255)
 			return (1);
 	}
@@ -84,7 +81,7 @@ int	check_colors(char *texture)
 	return (0);
 }
 
-int	test_image(t_vars *vars, char *texture)
+int	test_image(t_cub *vars, char *texture)
 {
 	int	i;
 
