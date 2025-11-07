@@ -6,11 +6,12 @@
 /*   By: ufalzone <ufalzone@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/08 16:15:38 by ufalzone          #+#    #+#             */
-/*   Updated: 2025/11/07 16:07:41 by ufalzone         ###   ########.fr       */
+/*   Updated: 2025/11/07 16:51:12 by ufalzone         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/raycasting.h"
+#include "../../include/parsing.h"
 
 void put_pixel(int x, int y, int color, t_game *game)
 {
@@ -133,14 +134,13 @@ void clear_image(t_game *game)
 void init_game(t_game *game)
 {
     init_player(WIDHT / 2, HEIGHT / 2, PI / 2, &game->player);
-    game->map = get_map();
+    game->map = game->cub->map;
     game->nb_column = 15;
     game->nb_lines = 10;
-    game->mlx = mlx_init();
-    game->win = mlx_new_window(game->mlx, WIDHT, HEIGHT, "Cub3D");
-    game->img = mlx_new_image(game->mlx, WIDHT, HEIGHT);
-    game->data = mlx_get_data_addr(game->img, &game->bpp, &game->size_line, &game->endian);
-    mlx_put_image_to_window(game->mlx, game->win, game->img, 0, 0);
+    game->cub->win = mlx_new_window(game->cub->mlx, WIDHT, HEIGHT, "Cub3D");
+    game->cub->img = mlx_new_image(game->cub->mlx, WIDHT, HEIGHT);
+    game->data = mlx_get_data_addr(game->cub->img, &game->bpp, &game->size_line, &game->endian);
+    mlx_put_image_to_window(game->cub->mlx, game->cub->win, game->cub->img, 0, 0);
 }
 
 
@@ -247,28 +247,62 @@ int draw_loop(t_game *game)
     } //la boucle part de la gauche du fov, puis incremente start_x pour qu'il balaye pixel par pixel tout le fov
     //si fov 60, et angle de vue = 0, on part de -30 et on va jusqu'a +30 (= 60)
     draw_minimap(game, player);
-    mlx_put_image_to_window(game->mlx, game->win, game->img, 0, 0);
+    mlx_put_image_to_window(game->cub->mlx, game->cub->win, game->cub->img, 0, 0);
 }
 
 int close_window(t_game *game)
 {
-    mlx_destroy_image(game->mlx,game->img);
-    mlx_destroy_window(game->mlx,game->win);
+    mlx_destroy_image(game->cub->mlx,game->cub->img);
+    mlx_destroy_window(game->cub->mlx,game->cub->win);
     //tout free
     exit(0);
 }
 
-int main()
+int init_parsing(t_cub *vars, int ac, char **av)
+{
+    int	fd;
+
+	if (ac != 2)
+		return (printf("Error\n"), 1);
+	fd = open(av[1], O_RDONLY);
+	if (fd < 0)
+		return (printf("Error\n"), 1);
+	vars = inits();
+	if (!vars)
+		return (printf("Error\n"), 1);
+	if (check_errors(fd, vars) == 1)
+		printf("Error cub\n");
+	return (0);
+}
+
+int print_map(char **av)
+{
+    int i;
+    i = 0;
+    int j = 0;
+    while (av[i])
+    {
+        printf("%s\n", av[i]);
+        i++;
+    }
+}
+
+#include <stdio.h>
+int main(int ac, char **av)
 {
     t_game game;
+    t_cub *vars;
 
+    init_parsing(vars, ac, av);
+    print_map(vars->map);
+    game.cub = vars;
     init_game(&game);
-    mlx_hook(game.win, 2, 1L<<0, key_press, &game.player);
-    mlx_hook(game.win, 3, 1L<<1, key_release, &game.player);
+    mlx_hook(game.cub->win, 2, 1L<<0, key_press, &game.player);
+    mlx_hook(game.cub->win, 3, 1L<<1, key_release, &game.player);
     
-    mlx_hook(game.win, 17, 0, close_window, &game);
+    mlx_hook(game.cub->win, 17, 0, close_window, &game);
 
 
-    mlx_loop_hook(game.mlx, draw_loop, &game);
-    mlx_loop(game.mlx);
+    mlx_loop_hook(game.cub->mlx, draw_loop, &game);
+    mlx_loop(game.cub->mlx);
 }

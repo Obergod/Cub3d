@@ -30,7 +30,7 @@ CLEAR = \033[2K\r
 
 
 # Sources
-COMMON_SRC = parsing/parsing.c parsing/check_map.c parsing/check_textures.c parsing/inits.c
+COMMON_SRC = parsing/parsing.c parsing/check_map.c parsing/check_textures.c parsing/inits.c raycasting/main.c raycasting/player.c
 
 COMMON_SRCS = $(addprefix $(SRCS_DIR), $(COMMON_SRC))
 OBJ_FILES = $(patsubst $(SRCS_DIR)%.c,$(OBJ_DIR)/%.o,$(COMMON_SRCS))

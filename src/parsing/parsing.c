@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mafioron <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: ufalzone <ufalzone@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/30 17:08:00 by mafioron          #+#    #+#             */
-/*   Updated: 2025/11/07 16:13:09 by mafioron         ###   ########.fr       */
+/*   Updated: 2025/11/07 16:17:23 by ufalzone         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,20 +60,20 @@ int	check_errors(int fd, t_cub *cub)
 
 
 
-int	main(int ac, char **av)
-{
-	int	fd;
-	t_cub *vars;
+// int	main(int ac, char **av)
+// {
+// 	int	fd;
+// 	t_cub *vars;
 
-	if (ac != 2)
-		return (printf("Error\n"), 1);
-	fd = open(av[1], O_RDONLY);
-	if (fd < 0)
-		return (printf("Error\n"), 1);
-	vars = inits();
-	if (!vars)
-		return (printf("Error\n"), 1);
-	if (check_errors(fd, vars) == 1)
-		printf("Error cub\n");
-	return (0);
-}
+// 	if (ac != 2)
+// 		return (printf("Error\n"), 1);
+// 	fd = open(av[1], O_RDONLY);
+// 	if (fd < 0)
+// 		return (printf("Error\n"), 1);
+// 	vars = inits();
+// 	if (!vars)
+// 		return (printf("Error\n"), 1);
+// 	if (check_errors(fd, vars) == 1)
+// 		printf("Error cub\n");
+// 	return (0);
+// }
