@@ -6,62 +6,61 @@
 /*   By: ufalzone <ufalzone@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/08 16:15:38 by ufalzone          #+#    #+#             */
-/*   Updated: 2025/11/07 20:34:31 by mafioron         ###   ########.fr       */
+/*   Updated: 2025/11/09 17:33:14 by ufalzone         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/raycasting.h"
 #include "../../include/parsing.h"
 
-void put_pixel(int x, int y, int color, t_game *game)
+void	put_pixel(int x, int y, int color, t_game *game)
 {
-    int index;
+	int	index;
 
-    if (x >= WIDHT || y >= HEIGHT || y < 0 || x < 0)
-        return ;
-    index = y * game->size_line + x * game->bpp / 8;
-    game->data[index] = color & 0xFF;
-    game->data[index + 1] = (color >> 8) & 0xFF;
-    game->data[index + 2] = (color >> 16) & 0xFF;
+	if (x >= WIDHT || y >= HEIGHT || x < 0 || y < 0)
+		return ;
+	index = y * game->size_line + x * game->bpp / 8;
+	game->data[index] = color & 0xFF;
+	game->data[index + 1] = (color >> 8) & 0xFF;
+	game->data[index + 2] = (color >> 16) & 0xFF;
 }
 
-void draw_square(int x, int y, int size, int color, t_game *game)
+static void	draw_square(int x, int y, int size, int color, t_game *game)
 {
-    int i; 
-    
-    for (i = 0; i < size ; i++)
-        put_pixel(x + i, y, color, game);
-    for (i = 0; i < size ; i++)
-        put_pixel(x, y + i, color, game);
-    for (i = 0; i < size ; i++)
-        put_pixel(x + size, y + i, color, game);
-    for (i = 0; i < size ; i++)
-        put_pixel(x + i, y + size, color, game);
+	int	i;
+
+	i = 0;
+	while (i < size)
+	{
+		put_pixel(x + i, y, color, game);
+		put_pixel(x, y + i, color, game);
+		put_pixel(x + size, y + i, color, game);
+		put_pixel(x + i, y + size, color, game);
+		i++;
+	}
 }
 
-
-void draw_map(t_game *game, int origin_x, int origin_y)
+static void	draw_map(t_game *game, int origin_x, int origin_y)
 {
-    char **map;
-    int color;
-    int y;
-    int x;
+	int		y;
+	int		x;
 
-    map = game->map;
-    color = 0xFFFFFF;
-    y = 0;
-    while (map[y])
-    {
-        x = 0;
-        while (map[y][x])
-        {
-            if (map[y][x] == '1')
-                draw_square(origin_x + x * MINIMAP_BLOCKSIZE, origin_y + y * MINIMAP_BLOCKSIZE, MINIMAP_BLOCKSIZE, color, game);            
-            x++;
-        }
-        y++;
-    }
+	y = 0;
+	while (game->map[y])
+	{
+		x = 0;
+		while (game->map[y][x])
+		{
+			if (game->map[y][x] == '1')
+				draw_square(origin_x + x * MINIMAP_BLOCKSIZE,
+					origin_y + y * MINIMAP_BLOCKSIZE,
+					MINIMAP_BLOCKSIZE, 0xFFFFFF, game);
+			x++;
+		}
+		y++;
+	}
 }
+
 static void	fill_rect(t_game *game, int x0, int y0, int w, int h)
 {
 	int	x;
@@ -80,37 +79,152 @@ static void	fill_rect(t_game *game, int x0, int y0, int w, int h)
 	}
 }
 
-void draw_minimap(t_game *game, t_player *player)
+static void	draw_minimap(t_game *game, t_player *player)
 {
-    int margin   = 25;
-    int origin_x = WIDHT - (game->nb_column * MINIMAP_BLOCKSIZE) - margin;
-    int origin_y = margin;
-    fill_rect(game, origin_x, origin_y, game->nb_column * MINIMAP_BLOCKSIZE, game->nb_lines * MINIMAP_BLOCKSIZE);
-    
-    draw_map(game, origin_x, origin_y);
+	int	margin;
+	int	origin_x;
+	int	origin_y;
+	int	mini_px;
+	int	mini_py;
 
-    int mini_px = origin_x + (int)(player->x * MINI_FACTOR) + MINIMAP_BLOCKSIZE / 2;
-    int mini_py = origin_y + (int)(player->y * MINI_FACTOR) + MINIMAP_BLOCKSIZE / 2;
-
-    draw_square(mini_px - 2, mini_py - 2, 4, 0x00FF, game);
+	margin = 25;
+	origin_x = WIDHT - (game->nb_column * MINIMAP_BLOCKSIZE) - margin;
+	origin_y = margin;
+	fill_rect(game, origin_x, origin_y,
+		game->nb_column * MINIMAP_BLOCKSIZE,
+		game->nb_lines * MINIMAP_BLOCKSIZE);
+	draw_map(game, origin_x, origin_y);
+	mini_px = origin_x + (int)((player->x / BLOCKSIZE) * MINIMAP_BLOCKSIZE);
+	mini_py = origin_y + (int)((player->y / BLOCKSIZE) * MINIMAP_BLOCKSIZE);
+	draw_square(mini_px - 2, mini_py - 2, 4, 0x00FF, game);
 }
 
-
-char **get_map(void)
+static int	get_texture_color(t_texture *tex, int x, int y)
 {
-    char **map = malloc(sizeof(char *) * 11);
-    map[0] = "111111111111111";
-    map[1] = "101000000000001";
-    map[2] = "100100000000001";
-    map[3] = "100010100000001";
-    map[4] = "100000000000001";
-    map[5] = "101100010000001";
-    map[6] = "101101000000001";
-    map[7] = "100000000000001";
-    map[8] = "100000000000001";
-    map[9] = "111111111111111";
-    map[10] = NULL;
-    return (map);
+	char	*pixel;
+
+	if (!tex->addr || tex->width <= 0 || tex->height <= 0)
+		return (0);
+	if (x < 0)
+		x = 0;
+	if (x >= tex->width)
+		x = tex->width - 1;
+	if (y < 0)
+		y = 0;
+	if (y >= tex->height)
+		y = tex->height - 1;
+	pixel = tex->addr + y * tex->line_len + x * (tex->bpp / 8);
+	return ((unsigned char)pixel[2] << 16
+		| (unsigned char)pixel[1] << 8
+		| (unsigned char)pixel[0]);
+}
+
+static void	draw_ceiling(t_game *game, int column, int end)
+{
+	int	y;
+
+	if (end < 0)
+		end = 0;
+	if (end > HEIGHT)
+		end = HEIGHT;
+	y = 0;
+	while (y < end)
+	{
+		put_pixel(column, y, game->ceiling_color, game);
+		y++;
+	}
+}
+
+static void	draw_floor(t_game *game, int column, int start)
+{
+	int	y;
+
+	if (start < 0)
+		start = 0;
+	if (start >= HEIGHT)
+		return ;
+	y = start;
+	while (y < HEIGHT)
+	{
+		put_pixel(column, y, game->floor_color, game);
+		y++;
+	}
+}
+
+static void	setup_column(t_column *col, t_ray *ray, t_texture *tex)
+{
+	col->height = HEIGHT / ray->wall_dist;
+	if (col->height < 1)
+		col->height = 1;
+	col->start = (HEIGHT - col->height) / 2;
+	if (col->start < 0)
+		col->start = 0;
+	col->end = (HEIGHT + col->height) / 2 - 1;
+	if (col->end >= HEIGHT)
+		col->end = HEIGHT - 1;
+	col->tex_x = (int)(ray->wall_x * tex->width);
+	if ((ray->side == 0 && ray->dir_x > 0)
+		|| (ray->side == 1 && ray->dir_y < 0))
+		col->tex_x = tex->width - col->tex_x - 1;
+	if (col->tex_x < 0)
+		col->tex_x = 0;
+	if (col->tex_x >= tex->width)
+		col->tex_x = tex->width - 1;
+	col->step = (double)tex->height / col->height;
+	col->tex_pos = (col->start - HEIGHT / 2 + col->height / 2) * col->step;
+}
+
+static void	draw_wall(t_game *game, t_texture *tex, t_column *col, int x)
+{
+	int	y;
+	int	tex_y;
+
+	y = col->start;
+	while (y <= col->end)
+	{
+		tex_y = (int)col->tex_pos;
+		if (tex_y >= tex->height)
+			tex_y = tex->height - 1;
+		put_pixel(x, y, get_texture_color(tex, col->tex_x, tex_y), game);
+		col->tex_pos += col->step;
+		y++;
+	}
+}
+
+static void	render_column(t_game *game, double angle, int column)
+{
+	t_ray		ray;
+	t_texture	*tex;
+	t_column	col;
+
+	init_ray(&ray, &game->player, angle);
+	step_ray(&ray, game);
+	resolve_ray(&ray);
+	ray.wall_dist *= cos(angle - game->player.angle);
+	if (ray.wall_dist <= 0.0)
+		ray.wall_dist = 0.0001;
+	tex = &game->textures[ray.tex_id];
+	setup_column(&col, &ray, tex);
+	draw_ceiling(game, column, col.start);
+	draw_wall(game, tex, &col, column);
+	draw_floor(game, column, col.end + 1);
+}
+
+static void	render_frame(t_game *game)
+{
+	double	angle;
+	double	step;
+	int		column;
+
+	angle = game->player.angle - (FOV / 2.0);
+	step = FOV / WIDHT;
+	column = 0;
+	while (column < WIDHT)
+	{
+		render_column(game, angle, column);
+		angle += step;
+		column++;
+	}
 }
 
 static float	player_angle_from_dir(char dir)
@@ -136,178 +250,126 @@ static void	set_player_from_map(t_game *game)
 	init_player(x, y, angle, &game->player);
 }
 
-void clear_image(t_game *game)
+static void	set_map_data(t_game *game)
 {
-    int y;
-    int x;
-
-    y = 0;
-    while (y < HEIGHT)
-    {
-        x = 0;
-        while (x < WIDHT)
-        {
-            put_pixel(x, y, 0, game);
-            x++;
-        }
-        y++;
-    }
+	game->map = game->cub->map;
+	set_player_from_map(game);
+	game->nb_column = game->cub->map_width;
+	game->nb_lines = game->cub->map_height;
+	if (game->nb_column <= 0)
+		game->nb_column = 1;
+	if (game->nb_lines <= 0)
+		game->nb_lines = 1;
 }
 
-void init_game(t_game *game)
+static void	clean_window(t_game *game)
 {
-    game->map = game->cub->map;
-    set_player_from_map(game);
-    game->nb_column = game->cub->map_width;
-    game->nb_lines = game->cub->map_height;
-    if (game->nb_column <= 0)
-        game->nb_column = 1;
-    if (game->nb_lines <= 0)
-        game->nb_lines = 1;
-    game->cub->win = mlx_new_window(game->cub->mlx, WIDHT, HEIGHT, "Cub3D");
-    game->cub->img = mlx_new_image(game->cub->mlx, WIDHT, HEIGHT);
-    game->data = mlx_get_data_addr(game->cub->img, &game->bpp, &game->size_line, &game->endian);
-    mlx_put_image_to_window(game->cub->mlx, game->cub->win, game->cub->img, 0, 0);
+	if (game->cub->img)
+	{
+		mlx_destroy_image(game->cub->mlx, game->cub->img);
+		game->cub->img = NULL;
+	}
+	if (game->cub->win)
+	{
+		mlx_destroy_window(game->cub->mlx, game->cub->win);
+		game->cub->win = NULL;
+	}
 }
 
-
-bool touch(float px, float py, t_game *game)
+static int	create_window(t_game *game)
 {
-    int x;
-    int y;
-    int len;
-    char cell;
-
-    if (px < 0 || py < 0)
-        return true;
-    y = py / BLOCKSIZE;
-    if (y < 0 || y >= game->cub->map_height)
-        return true;
-    x = px / BLOCKSIZE;
-    if (!game->map || !game->map[y])
-        return true;
-    len = ft_strlen(game->map[y]);
-    if (x < 0 || x >= len)
-        return true;
-    cell = game->map[y][x];
-    if (cell == '1' || cell == ' ')
-        return true;
-    return false;
+	clean_window(game);
+	game->cub->win = mlx_new_window(game->cub->mlx, WIDHT, HEIGHT, "Cub3D");
+	if (!game->cub->win)
+		return (1);
+	game->cub->img = mlx_new_image(game->cub->mlx, WIDHT, HEIGHT);
+	if (!game->cub->img)
+		return (clean_window(game), 1);
+	game->data = mlx_get_data_addr(game->cub->img, &game->bpp,
+			&game->size_line, &game->endian);
+	if (!game->data)
+		return (clean_window(game), 1);
+	mlx_put_image_to_window(game->cub->mlx, game->cub->win,
+		game->cub->img, 0, 0);
+	return (0);
 }
 
-float distance (float x, float y)
+static void	clear_image(t_game *game)
 {
-    return sqrt(x * x + y * y);
+	int	y;
+	int	x;
+
+	y = 0;
+	while (y < HEIGHT)
+	{
+		x = 0;
+		while (x < WIDHT)
+			put_pixel(x++, y, 0, game);
+		y++;
+	}
 }
 
-float fixed_dist(float x1, float y1, float x2, float y2, t_game *game)
+int	init_game(t_game *game)
 {
-    float delta_x = x2 - x1;
-    float delta_y = y2 - y1;
-    float angle = atan2(delta_y, delta_x) - game->player.angle;
-    float fix_dist = distance(delta_x, delta_y) * cos(angle);
-    return fix_dist;
+	set_map_data(game);
+	if (load_wall_textures(game) != 0)
+		return (1);
+	if (init_colors(game) != 0)
+		return (destroy_textures(game), 1);
+	if (create_window(game) != 0)
+		return (destroy_textures(game), 1);
+	return (0);
 }
 
-
-void draw_line(t_player *player, t_game *game, float start_x, int i)
+bool	touch(float px, float py, t_game *game)
 {
-    float ray_x;
-    float ray_y;
-    float cos_angle;
-    float sin_angle;
-    
-    cos_angle = cos(start_x);
-    sin_angle = sin(start_x);
-    ray_x = player->x;
-    ray_y = player->y;
-    while (!touch(ray_x, ray_y, game))
-    {
-        // put_pixel(ray_x, ray_y, 0xFF0000, game);
-        ray_x += cos_angle;
-        ray_y += sin_angle;
-    }
+	int	x;
+	int	y;
+	int	len;
+	char	cell;
 
-    float dist = fixed_dist(player->x, player->y, ray_x, ray_y, game);
-    if (dist < 0.0001f)
-        dist = 0.0001f;
-    float height = (BLOCKSIZE / dist) * (WIDHT / 2);
-    int start_y = (HEIGHT - height) / 2;
-    int end = start_y + height;
-    //ciel
-    int y = 0;
-    while (y < start_y)
-    {
-        put_pixel(i, y, SKY_COLOR, game);
-        y++;
-    }
-    while (start_y < end)
-    {
-        put_pixel(i, start_y, 255, game);
-        start_y++;
-    }
-    //sol
-    y = end + 1;
-    while (y < HEIGHT)
-    {
-        put_pixel(i, y, FLOOR_COLOR, game);
-        y++;
-    }
+	if (px < 0 || py < 0)
+		return (true);
+	y = py / BLOCKSIZE;
+	if (y < 0 || y >= game->cub->map_height)
+		return (true);
+	x = px / BLOCKSIZE;
+	if (!game->map || !game->map[y])
+		return (true);
+	len = ft_strlen(game->map[y]);
+	if (x < 0 || x >= len)
+		return (true);
+	cell = game->map[y][x];
+	if (cell == '1' || cell == ' ')
+		return (true);
+	return (false);
 }
 
-int draw_loop(t_game *game)
+int	draw_loop(t_game *game)
 {
-    t_player *player;
-    float ray_x;
-    float ray_y;
-    
-    player = &game->player;
-    clear_image(game);
-    move_player(player, game);
-    // draw_square(player->x, player->y, 15, 0x00FF, game);
-    // draw_map(game);
-
-    float fraction = PI / 3 / WIDHT; //PI / 3 = FOV (60degres) - FOV / WIDHT = angle couvert par un seul pixel
-    // PI / 3 → 60° en radians. (FOV)
-
-    // On divise par WIDTH (disons 640) :
-    // fraction=π/3640=60∘640≈0,09375∘≈0,001635 rad
-    // fraction=640π/3​=64060∘​≈0,09375∘≈0,001635rad
-
-    // Sens concret :
-    // Entre la colonne 0 et la colonne 1, on tourne la tête de 0,09375°.
-
-    // apres 640 increments, on aura parcouru les 60° complets.
-
-    // printf("fraction : %f\n", fraction);
-    float start_x = player->angle - PI / 6;
-    //reculer de la moitie du fov, on veut le bord gauche du cone de vision
-    int i = 0;
-    while (i < WIDHT)
-    {
-        draw_line(player, game, start_x, i);
-        start_x += fraction;
-        i++;
-    } //la boucle part de la gauche du fov, puis incremente start_x pour qu'il balaye pixel par pixel tout le fov
-    //si fov 60, et angle de vue = 0, on part de -30 et on va jusqu'a +30 (= 60)
-    draw_minimap(game, player);
-    mlx_put_image_to_window(game->cub->mlx, game->cub->win, game->cub->img, 0, 0);
+	clear_image(game);
+	move_player(&game->player, game);
+	render_frame(game);
+	draw_minimap(game, &game->player);
+	mlx_put_image_to_window(game->cub->mlx, game->cub->win,
+		game->cub->img, 0, 0);
+	return (0);
 }
 
-int close_window(t_game *game)
+int	close_window(t_game *game)
 {
-    mlx_destroy_image(game->cub->mlx,game->cub->img);
-    mlx_destroy_window(game->cub->mlx,game->cub->win);
-    mlx_destroy_display(game->cub->mlx);
-    free_cub(game->cub);
-    //tout free
-    exit(0);
+	destroy_textures(game);
+	clean_window(game);
+	mlx_destroy_display(game->cub->mlx);
+	free_cub(game->cub);
+	exit(0);
+	return (0);
 }
 
-t_cub *init_parsing(int ac, char **av)
+static t_cub	*init_parsing(int ac, char **av)
 {
-    int	fd;
-    t_cub *vars;
+	int		fd;
+	t_cub	*vars;
 
 	if (ac != 2)
 		return (printf("Error\n"), NULL);
@@ -319,37 +381,30 @@ t_cub *init_parsing(int ac, char **av)
 		return (printf("Error\n"), NULL);
 	if (check_errors(fd, vars) == 1)
 		return (printf("Error\n"), NULL);
-    printf("Tout est bon!");
+	printf("Tout est bon!");
 	return (vars);
 }
 
-int print_map(char **av)
+int	main(int ac, char **av)
 {
-    int i;
-    i = 0;
-    int j = 0;
-    while (av[i])
-    {
-        printf("%s\n", av[i]);
-        i++;
-    }
-}
+	t_game	game;
+	t_cub	*vars;
 
-#include <stdio.h>
-int main(int ac, char **av)
-{
-    t_game game;
-    t_cub *vars;
-
-    vars = init_parsing(ac, av);
-    if (!vars)
-        return (1);
-    // print_map(vars->map);
-    game.cub = vars;
-    init_game(&game);
-    mlx_hook(game.cub->win, 2, 1L<<0, key_press, &game.player);
-    mlx_hook(game.cub->win, 3, 1L<<1, key_release, &game.player);
-    mlx_hook(game.cub->win, 17, 0, close_window, &game);
-    mlx_loop_hook(game.cub->mlx, draw_loop, &game);
-    mlx_loop(game.cub->mlx);
+	ft_memset(&game, 0, sizeof(t_game));
+	vars = init_parsing(ac, av);
+	if (!vars)
+		return (1);
+	game.cub = vars;
+	if (init_game(&game) != 0)
+	{
+		mlx_destroy_display(game.cub->mlx);
+		free_cub(game.cub);
+		return (1);
+	}
+	mlx_hook(game.cub->win, 2, 1L << 0, key_press, &game.player);
+	mlx_hook(game.cub->win, 3, 1L << 1, key_release, &game.player);
+	mlx_hook(game.cub->win, 17, 0, close_window, &game);
+	mlx_loop_hook(game.cub->mlx, draw_loop, &game);
+	mlx_loop(game.cub->mlx);
+	return (0);
 }

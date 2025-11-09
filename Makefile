@@ -32,7 +32,8 @@ CLEAR = \033[2K\r
 # Sources
 COMMON_SRC = parsing/parsing.c parsing/check_map.c parsing/check_textures.c \
 			 parsing/inits.c parsing/parsing_utils.c \
-			 raycasting/main.c raycasting/player.c
+			 raycasting/main.c raycasting/player.c \
+			 raycasting/textures.c raycasting/ray.c
 			 
 
 COMMON_SRCS = $(addprefix $(SRCS_DIR), $(COMMON_SRC))
