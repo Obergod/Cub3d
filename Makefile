@@ -32,8 +32,20 @@ CLEAR = \033[2K\r
 # Sources
 COMMON_SRC = parsing/parsing.c parsing/check_map.c parsing/check_textures.c \
 			 parsing/inits.c parsing/parsing_utils.c \
-			 raycasting/main.c raycasting/player.c \
-			 raycasting/textures.c raycasting/ray.c
+			 raycasting/core/main.c raycasting/core/game_setup.c \
+			 raycasting/core/collision.c raycasting/core/spawn.c \
+			 raycasting/player/player_init.c \
+			 raycasting/player/player_input.c \
+			 raycasting/player/player_move.c \
+			 raycasting/ray/ray_init.c \
+			 raycasting/ray/ray_step.c \
+			 raycasting/ray/ray_resolve.c \
+			 raycasting/render/column.c \
+			 raycasting/render/minimap.c \
+			 raycasting/render/pixel.c \
+			 raycasting/render/render.c \
+			 raycasting/textures/textures_color.c \
+			 raycasting/textures/textures_load.c
 			 
 
 COMMON_SRCS = $(addprefix $(SRCS_DIR), $(COMMON_SRC))
