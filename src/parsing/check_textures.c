@@ -6,7 +6,7 @@
 /*   By: mafioron <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/08 16:10:45 by mafioron          #+#    #+#             */
-/*   Updated: 2025/11/07 20:39:34 by mafioron         ###   ########.fr       */
+/*   Updated: 2025/11/10 20:53:04 by mafioron         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 int	check_textures(char **cub, t_cub *vars)
 {
-	int	 i;
+	int	i;
 	int	nb_texture;
 
 	nb_texture = 0;
@@ -23,8 +23,7 @@ int	check_textures(char **cub, t_cub *vars)
 	{
 		if (check_double(cub, i) == 1)
 			return (1);
-		if (!ft_strncmp(cub[i], "NO ", 3) || !ft_strncmp(cub[i], "SO ", 3) || 
-				!ft_strncmp(cub[i], "WE ", 3) || !ft_strncmp(cub[i], "EA ", 3))
+		if (is_texture(cub[i]))
 		{
 			if (test_image(vars, cub[i]) == 1)
 				return (1);

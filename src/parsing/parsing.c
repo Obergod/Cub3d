@@ -6,7 +6,7 @@
 /*   By: ufalzone <ufalzone@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/30 17:08:00 by mafioron          #+#    #+#             */
-/*   Updated: 2025/11/07 20:35:56 by mafioron         ###   ########.fr       */
+/*   Updated: 2025/11/10 20:16:04 by mafioron         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,8 @@ char	**split_all_file(int fd)
 		if (!stock)
 			return (NULL);
 	}
+	if (!stock)
+		return (NULL);
 	cub = ft_split(stock, '\n');
 	free(stock);
 	if (!cub)

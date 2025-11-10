@@ -6,7 +6,7 @@
 /*   By: ufalzone <ufalzone@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/10 18:50:08 by ufalzone          #+#    #+#             */
-/*   Updated: 2025/11/10 18:50:08 by ufalzone         ###   ########.fr       */
+/*   Updated: 2025/11/10 20:47:59 by mafioron         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,14 +36,22 @@ static t_cub    *init_parsing(int ac, char **av)
 
     if (ac != 2)
         return (parsing_error());
+	if (!strstr(av[1], ".cub"))
+        return (parsing_error());
     fd = open_config(av[1]);
     if (fd < 0)
         return (NULL);
     vars = inits();
     if (!vars)
+	{
+		free_cub(vars);
         return (parsing_error());
+	}
     if (check_errors(fd, vars) == 1)
+	{
+		free_cub(vars);
         return (parsing_error());
+	}
     printf("Tout est bon!");
     return (vars);
 }

@@ -6,7 +6,7 @@
 /*   By: mafioron <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/30 17:08:16 by mafioron          #+#    #+#             */
-/*   Updated: 2025/11/07 20:10:19 by mafioron         ###   ########.fr       */
+/*   Updated: 2025/11/10 17:13:44 by mafioron         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,12 +56,23 @@ int		check_map(char **cub_file, t_cub *cub);
 int		test_image(t_cub *cub, char *texture);
 int		check_colors(char *texture);
 t_cub	*inits(void);
-int		set_texture(char *cub, char **texture, int *text_count, int *count_cub);
-char	**init_textures(char **cub);
 int		check_double(char **cub, int i);
 int		check_errors(int fd, t_cub *cub);
+
+
+/*****		Parsing_utils	*******/
+int	is_texture(char *line);
 void free_cub(t_cub *cub);
 
+
+/*****		Player_utils	*******/
+int	is_player(char c);
+int	save_player(t_cub *cub, int row, int col, char dir);
+int	check_tile(t_cub *cub, char **map, int row, int col);
+
+/*****		inits		*******/
+char	**init_textures(char **cub);
+int	set_texture(char *cub, char **texture);
 
 
 

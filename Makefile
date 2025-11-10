@@ -31,7 +31,7 @@ CLEAR = \033[2K\r
 
 # Sources
 COMMON_SRC = parsing/parsing.c parsing/check_map.c parsing/check_textures.c \
-			 parsing/inits.c parsing/parsing_utils.c \
+			 parsing/inits.c parsing/parsing_utils.c parsing/player_utils.c\
 			 raycasting/core/main.c raycasting/core/game_setup.c \
 			 raycasting/core/collision.c raycasting/core/spawn.c \
 			 raycasting/player/player_init.c \

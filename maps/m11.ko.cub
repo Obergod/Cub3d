@@ -1,14 +1,14 @@
 F                                              42,+255,0
-NO             ./tests/maps/images/NO.xpm
-WE ./tests/maps/images/WE space.xpm                     
-EA ./tests/maps/images/EA.xpm
+NO             Cub_textures/BearWall.xpm
+WE Cub_textures/BasicWall.xpm
+EA Cub_textures/skullWall.xpm
 
 C 66,206,666
 
 
 
 
-SO ./tests/maps/images/SO.xpm
+SO Cub_textures/BasicDarkWall.xpm
         1111111111111111111111111
         1000000000000000000000001
         1000000000000001111111111

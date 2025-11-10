@@ -6,53 +6,19 @@
 /*   By: mafioron <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/08 16:09:02 by mafioron          #+#    #+#             */
-/*   Updated: 2025/11/07 17:05:27 by mafioron         ###   ########.fr       */
+/*   Updated: 2025/11/10 20:54:18 by mafioron         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/parsing.h"
 
-static int	is_player(char c)
+static int	width_and_char(t_cub *cub, char **map)
 {
-	return (c == 'N' || c == 'S' || c == 'E' || c == 'W');
-}
-
-static int	save_player(t_cub *cub, int row, int col, char dir)
-{
-	if (cub->player_dir != '\0')
-		return (1);
-	cub->player_row = row;
-	cub->player_col = col;
-	cub->player_dir = dir;
-	return (0);
-}
-
-static int	check_tile(t_cub *cub, char **map, int row, int col)
-{
-	if (is_player(map[row][col]))
-	{
-		if (save_player(cub, row, col, map[row][col]))
-			return (1);
-		map[row][col] = '0';
-		return (0);
-	}
-	if (map[row][col] == '0' || map[row][col] == '1' || map[row][col] == ' ')
-		return (0);
-	return (1);
-}
-
-int	check_map(char **cub_file, t_cub *cub)
-{
-	char	**map;
-	int		err;
 	int		i;
 	int		j;
 	int		len;
 
 	i = -1;
-	map = ft_2dstrdup(cub_file + 6);
-	if (!map)
-		return (-1);
 	while (map[++i])
 	{
 		len = ft_strlen(map[i]);
@@ -61,23 +27,27 @@ int	check_map(char **cub_file, t_cub *cub)
 		j = -1;
 		while (map[i][++j])
 			if (check_tile(cub, map, i, j))
-			{
-				ft_free_split(map);
-				return (1);
-			}
+				return (ft_free_split(map), 1);
 	}
 	cub->map_height = i;
-	if (cub->player_dir == '\0')
-	{
-		ft_free_split(map);
+	return (0);
+}
+
+int	check_map(char **cub_file, t_cub *cub)
+{
+	char	**map;
+	int		err;
+
+	map = ft_2dstrdup(cub_file + 6);
+	if (!map)
+		return (-1);
+	if (width_and_char(cub, map) == 1)
 		return (1);
-	}
+	if (cub->player_dir == '\0')
+		return (ft_free_split(map), 1);
 	err = check_wall(map, cub->player_col, cub->player_row);
 	if (err != 0)
-	{
-		ft_free_split(map);
-		return (err);
-	}
+		return (ft_free_split(map), err);
 	cub->map = map;
 	return (0);
 }
