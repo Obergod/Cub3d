@@ -12,36 +12,36 @@
 
 #include "raycasting.h"
 
-static bool    out_of_bounds(float px, float py, t_game *game)
+static bool	out_of_bounds(float px, float py, t_game *game)
 {
-    int    x;
-    int    y;
-    int    len;
+	int	x;
+	int	y;
+	int	len;
 
-    if (px < 0 || py < 0 || !game->map)
-        return (true);
-    y = (int)(py / BLOCKSIZE);
-    if (y < 0 || y >= game->cub->map_height || !game->map[y])
-        return (true);
-    x = (int)(px / BLOCKSIZE);
-    len = ft_strlen(game->map[y]);
-    if (x < 0 || x >= len)
-        return (true);
-    return (false);
+	if (px < 0 || py < 0 || !game->map)
+		return (true);
+	y = (int)(py / BLOCKSIZE);
+	if (y < 0 || y >= game->cub->map_height || !game->map[y])
+		return (true);
+	x = (int)(px / BLOCKSIZE);
+	len = ft_strlen(game->map[y]);
+	if (x < 0 || x >= len)
+		return (true);
+	return (false);
 }
 
-bool    is_blocked(float px, float py, t_game *game)
+bool	is_blocked(float px, float py, t_game *game)
 {
-    int    x;
-    int    y;
-    char    cell;
+	int		x;
+	int		y;
+	char	cell;
 
-    if (out_of_bounds(px, py, game))
-        return (true);
-    y = (int)(py / BLOCKSIZE);
-    x = (int)(px / BLOCKSIZE);
-    cell = game->map[y][x];
-    if (cell == '1' || cell == ' ')
-        return (true);
-    return (false);
+	if (out_of_bounds(px, py, game))
+		return (true);
+	y = (int)(py / BLOCKSIZE);
+	x = (int)(px / BLOCKSIZE);
+	cell = game->map[y][x];
+	if (cell == '1' || cell == ' ')
+		return (true);
+	return (false);
 }
